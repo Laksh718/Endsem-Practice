@@ -46,7 +46,7 @@ body{margin:0;color:var(--ink);font:16px/1.55 var(--body);min-height:100vh;-webk
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--omr2);outline-offset:2px}
-.wrap{max-width:1440px;margin:0 auto;padding:24px clamp(16px,3vw,40px) 72px}
+.wrap{max-width:1760px;margin:0 auto;padding:24px clamp(16px,3vw,40px) 72px}
 
 /* Hero */
 .top{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;gap:18px 24px;align-items:flex-end;justify-content:space-between;
@@ -233,11 +233,40 @@ select:hover{border-color:var(--omr)}
 .inquiz .fb{margin-top:12px;padding-top:12px;padding-bottom:12px}
 .inquiz .also{margin-top:10px}
 .qsheet .btns{position:sticky;bottom:0;z-index:2;margin:14px -22px 0;padding:12px 22px;background:var(--sheet);border-top:1px solid var(--line);border-radius:0 0 20px 20px}
-.inquiz .omrs{top:12px;max-height:calc(100vh - 24px)}
+.inquiz .omrs{top:12px;height:calc(100vh - 104px);max-height:none}
+.inquiz .qsheet{min-height:calc(100vh - 104px);display:flex;flex-direction:column}
+.inquiz .qmain{flex:1;display:flex;flex-direction:column;justify-content:flex-start;padding:1vh 0 2vh}
+.inquiz .qsheet .btns{margin-top:0}
+.inquiz .foot{display:none}
+.orows{position:relative}
+@media (min-width:1081px){
+  .inquiz .qtext{font-size:clamp(19px,3.3vh,38px);line-height:1.45;margin:1.6vh 0 3vh}
+  .inquiz .qhead .tag{font-size:clamp(12.5px,1.45vh,15px)}
+  .inquiz .topicline{font-size:clamp(14px,1.6vh,17px)}
+  .inquiz .opts{gap:clamp(10px,1.6vh,18px)}
+  .inquiz .opt{min-height:clamp(64px,15vh,170px);padding:12px clamp(16px,1.4vw,26px);gap:clamp(14px,1.2vw,22px)}
+  .inquiz .opt .t{font-size:clamp(16px,2.6vh,28px)}
+  .inquiz .withimg .qtext,.inquiz .longq .qtext{font-size:clamp(18px,2.6vh,30px);margin:1vh 0 2vh}
+  .inquiz .withimg .fb{font-size:clamp(14.5px,1.7vh,17px)}
+  .inquiz .qbody.hasimg .opt{min-height:clamp(56px,7vh,88px)}
+  .inquiz .qbody.hasimg .opt .t{font-size:clamp(16px,2.2vh,24px)}
+  .inquiz .qbody.hasimg .opts{gap:clamp(8px,1.2vh,14px)}
+  .inquiz .bub{width:clamp(38px,5vh,54px);height:clamp(38px,5vh,54px);font-size:clamp(15px,2vh,21px)}
+  .inquiz .fb{font-size:clamp(15px,1.9vh,19px);margin-top:1.6vh}
+  .inquiz .qsheet{padding:20px clamp(22px,2vw,36px) 0}
+  .inquiz .qsheet .btns{margin-left:calc(-1*clamp(22px,2vw,36px));margin-right:calc(-1*clamp(22px,2vw,36px));padding-left:clamp(22px,2vw,36px);padding-right:clamp(22px,2vw,36px)}
+  .inquiz .qsheet .btns .btn{padding:clamp(11px,1.5vh,16px) clamp(22px,2vw,34px);font-size:clamp(15px,1.8vh,18px)}
+  .layout.quiz{grid-template-columns:minmax(0,1fr) clamp(320px,24vw,470px)}
+  .inquiz .orows{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .inquiz .orow i{width:clamp(20px,2.4vh,26px);height:clamp(20px,2.4vh,26px);font-size:clamp(9.5px,1.1vh,11.5px)}
+  .inquiz .orow .on{font-size:clamp(12.5px,1.4vh,14.5px)}
+  .inquiz .qbody.hasimg .qimg{max-height:58vh;width:100%}
+}
 .foot{margin:28px auto 0;font-size:13.5px;line-height:1.65;color:var(--muted);max-width:75ch;text-align:center}
 
 @media (max-width:1080px){
   .layout.setup,.layout.quiz{grid-template-columns:minmax(0,1fr)}
+  .inquiz .omrs{height:auto}
   .side{position:static}
   .omrs{max-height:none}
   .orows{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));max-height:340px}
@@ -685,6 +714,8 @@ function render(){
     m.innerHTML=S.view==="setup"?setupHTML():S.view==="quiz"?quizHTML():resultHTML();
   }else if(S.tab==="hot"){m.innerHTML=hotHTML()}
   else{m.innerHTML=bcHTML()}
+  var cur=m.querySelector(".orow.cur"),box=m.querySelector(".orows");
+  if(cur&&box){var t=cur.offsetTop-box.offsetTop-box.clientHeight/2+cur.offsetHeight/2;box.scrollTop=Math.max(0,t)}
 }
 
 function setupHTML(){
@@ -725,7 +756,8 @@ function alsoHTML(q,k){
 function quizHTML(){
   var s=S.sess,k=subj(),q=s.list[s.i],a=s.ans[s.i],exam=s.mode==="exam";
   var locked=!exam&&a.locked;
-  var h='<section class="sheet qsheet"><div class="qtop"><b>Question '+(s.i+1)+' <span class="hint">of '+s.list.length+'</span></b><div class="bar"><i style="width:'+Math.round((s.i+(locked||(exam&&a.sel!==null)?1:0))/s.list.length*100)+'%"></i></div><button class="ghost" data-act="quit">Quit</button></div>';
+  var h='<section class="sheet qsheet'+(q.img?' withimg':'')+(q.q.length>140?' longq':'')+'"><div class="qtop"><b>Question '+(s.i+1)+' <span class="hint">of '+s.list.length+'</span></b><div class="bar"><i style="width:'+Math.round((s.i+(locked||(exam&&a.sel!==null)?1:0))/s.list.length*100)+'%"></i></div><button class="ghost" data-act="quit">Quit</button></div>';
+  h+='<div class="qmain">';
   h+=badges(q,k);
   h+='<div class="qtext">'+esc(q.q)+'</div><div class="qbody'+(q.img?' hasimg':'')+'">'+(q.img?'<img class="qimg" src="'+imgSrc(q.img)+'" alt="Diagram for this question">':'')+'<div class="qright"><div class="opts" role="group" aria-label="Options">';
   q.o.forEach(function(op,i){
@@ -740,7 +772,7 @@ function quizHTML(){
     var ok=a.sel===q.a;
     h+='<div class="fb'+(ok?'':' no')+'"><b>'+(ok?'Correct. ':'Not quite. ')+'Answer: '+"ABCD"[q.a]+'</b>'+esc(q.e)+'</div>'+alsoHTML(q,k);
   }
-  h+='</div></div>';
+  h+='</div></div></div>';
   h+='<div class="btns">';
   if(exam&&s.i>0)h+='<button class="btn alt" data-act="prev">Previous</button>';
   if(locked&&a.sel!==q.a)h+='<button class="btn alt" data-act="again">Try again</button>';
