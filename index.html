@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>OMR Practice – Discrete Maths &amp; FLA past papers</title>
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<meta name="theme-color" content="#b4295e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -209,6 +211,29 @@ select:hover{border-color:var(--omr)}
 .orow.ok .on{color:var(--ok)}.orow.bad .on{color:var(--bad)}
 .figgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:0 28px}
 .figgrid .qimg{width:100%;max-height:440px;object-fit:contain;margin-top:10px}
+.qtop{display:flex;align-items:center;gap:16px;margin-bottom:14px}
+.qtop>b{font:800 18px var(--display);white-space:nowrap}
+.qtop .bar{flex:1;margin:0}
+.inquiz .top{flex-direction:row;align-items:center;justify-content:space-between;padding:12px 20px;border-radius:16px;margin-bottom:14px}
+.inquiz .top::before,.inquiz .brand p,.inquiz .eyebrow,.inquiz #tabs{display:none}
+.inquiz .brand h1{font-size:24px}
+.inquiz .seg button{padding:6px 12px;font-size:13px}
+.inquiz .top .ghost{padding:6px 12px}
+.inquiz .wrap{padding-top:12px}
+.inquiz .qsheet{padding:18px 22px 0}
+.inquiz .qtext{font-size:19px;margin:8px 0 14px}
+.inquiz .qhead{margin-bottom:4px}
+.inquiz .opts{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.inquiz .opt{padding:10px 14px}
+.inquiz .qbody.hasimg{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:20px;align-items:start}
+.inquiz .qbody.hasimg .opts{grid-template-columns:minmax(0,1fr)}
+.inquiz .qbody.hasimg .qimg{max-height:62vh;margin:0}
+.inquiz .qbody.hasimg .fb{margin-top:10px}
+.inquiz .qimg{max-height:34vh;width:auto;max-width:100%;object-fit:contain;margin-bottom:14px}
+.inquiz .fb{margin-top:12px;padding-top:12px;padding-bottom:12px}
+.inquiz .also{margin-top:10px}
+.qsheet .btns{position:sticky;bottom:0;z-index:2;margin:14px -22px 0;padding:12px 22px;background:var(--sheet);border-top:1px solid var(--line);border-radius:0 0 20px 20px}
+.inquiz .omrs{top:12px;max-height:calc(100vh - 24px)}
 .foot{margin:28px auto 0;font-size:13.5px;line-height:1.65;color:var(--muted);max-width:75ch;text-align:center}
 
 @media (max-width:1080px){
@@ -217,7 +242,24 @@ select:hover{border-color:var(--omr)}
   .omrs{max-height:none}
   .orows{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));max-height:340px}
 }
+@media (max-width:900px){
+  .inquiz .opts{grid-template-columns:minmax(0,1fr)}
+  .inquiz .qbody.hasimg{display:block}
+  .inquiz .qbody.hasimg .qimg{max-height:30vh;margin-bottom:12px}
+}
 @media (max-width:640px){
+  .inquiz .top{padding:10px 14px;flex-wrap:wrap}
+  .inquiz .brand h1{font-size:20px}
+  .inquiz .tools{width:auto}
+  .inquiz .qsheet{padding:14px 14px 0}
+  .qsheet .btns{margin:12px -14px 0;padding:10px 14px}
+  .inquiz .qtext{font-size:17.5px}
+  .inquiz .tools,.qsheet .btns .hint,.inquiz .qhead .tag:not(.paper):not(.freq),.inquiz .topicline{display:none}
+  .inquiz .qtop{margin-bottom:10px}
+  .inquiz .opts{gap:8px}
+  .inquiz .opt{padding:8px 12px;gap:10px}
+  .inquiz .opt .t{font-size:15.5px}
+  .inquiz .bub{width:32px;height:32px;font-size:14px}
   .figgrid{grid-template-columns:minmax(0,1fr)}
   .tabs{width:auto}
   .tabs button{flex:1}
@@ -636,6 +678,7 @@ function renderChrome(){
   $("#themebtn").textContent=store.theme==="dark"?"Light theme":store.theme==="light"?"Dark theme":"Switch theme";
 }
 function render(){
+  document.body.classList.toggle("inquiz",S.tab==="practice"&&S.view==="quiz");
   renderChrome();
   var m=$("#main");
   if(S.tab==="practice"){
@@ -682,10 +725,9 @@ function alsoHTML(q,k){
 function quizHTML(){
   var s=S.sess,k=subj(),q=s.list[s.i],a=s.ans[s.i],exam=s.mode==="exam";
   var locked=!exam&&a.locked;
-  var h='<section class="sheet"><div class="qhead" style="justify-content:space-between"><b>Question '+(s.i+1)+' of '+s.list.length+'</b><button class="ghost" data-act="quit">Quit to setup</button></div>';
-  h+='<div class="bar"><i style="width:'+Math.round((s.i+(locked||(exam&&a.sel!==null)?1:0))/s.list.length*100)+'%"></i></div>';
+  var h='<section class="sheet qsheet"><div class="qtop"><b>Question '+(s.i+1)+' <span class="hint">of '+s.list.length+'</span></b><div class="bar"><i style="width:'+Math.round((s.i+(locked||(exam&&a.sel!==null)?1:0))/s.list.length*100)+'%"></i></div><button class="ghost" data-act="quit">Quit</button></div>';
   h+=badges(q,k);
-  h+='<div class="qtext">'+esc(q.q)+'</div>'+(q.img?'<img class="qimg" src="'+imgSrc(q.img)+'" alt="Diagram for this question">':'')+'<div class="opts" role="group" aria-label="Options">';
+  h+='<div class="qtext">'+esc(q.q)+'</div><div class="qbody'+(q.img?' hasimg':'')+'">'+(q.img?'<img class="qimg" src="'+imgSrc(q.img)+'" alt="Diagram for this question">':'')+'<div class="qright"><div class="opts" role="group" aria-label="Options">';
   q.o.forEach(function(op,i){
     var c="opt";
     if(locked){if(i===q.a)c+=" ok";else if(i===a.sel)c+=" bad"}
@@ -698,6 +740,7 @@ function quizHTML(){
     var ok=a.sel===q.a;
     h+='<div class="fb'+(ok?'':' no')+'"><b>'+(ok?'Correct. ':'Not quite. ')+'Answer: '+"ABCD"[q.a]+'</b>'+esc(q.e)+'</div>'+alsoHTML(q,k);
   }
+  h+='</div></div>';
   h+='<div class="btns">';
   if(exam&&s.i>0)h+='<button class="btn alt" data-act="prev">Previous</button>';
   if(locked&&a.sel!==q.a)h+='<button class="btn alt" data-act="again">Try again</button>';
