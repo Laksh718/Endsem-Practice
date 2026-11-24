@@ -44,7 +44,7 @@ body{margin:0;color:var(--ink);font:16px/1.55 var(--body);min-height:100vh;-webk
 button,select,input{font:inherit;color:inherit}
 button{cursor:pointer}
 :focus-visible{outline:3px solid var(--omr2);outline-offset:2px}
-.wrap{max-width:900px;margin:0 auto;padding:24px 16px 72px}
+.wrap{max-width:1440px;margin:0 auto;padding:24px clamp(16px,3vw,40px) 72px}
 
 /* Hero */
 .top{position:relative;overflow:hidden;display:flex;flex-wrap:wrap;gap:18px 24px;align-items:flex-end;justify-content:space-between;
@@ -67,7 +67,8 @@ button{cursor:pointer}
 
 /* Tabs */
 .tabs{display:flex;gap:4px;padding:5px;margin-bottom:18px;overflow-x:auto;background:var(--sheet);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);scrollbar-width:none}
-.tabs button{flex:1;border:0;background:none;padding:10px 16px;border-radius:12px;font:700 14.5px var(--body);color:var(--muted);white-space:nowrap}
+.tabs{width:fit-content;max-width:100%}
+.tabs button{flex:none;border:0;background:none;padding:10px 16px;border-radius:12px;font:700 14.5px var(--body);color:var(--muted);white-space:nowrap}
 .tabs button:hover{color:var(--ink)}
 .tabs button[aria-selected="true"]{color:#fff;background:var(--fill);box-shadow:0 6px 16px -8px rgba(120,40,180,.7)}
 
@@ -179,9 +180,47 @@ select:hover{border-color:var(--omr)}
 .bc .no{color:var(--line)}
 .heat{display:inline-block;min-width:36px;border-radius:999px;padding:2px 8px;font:800 12.5px var(--body);color:#1b2430}
 .h1{background:#cfe9d8}.h2{background:#f4e08a}.h3{background:#f2b45f}.h4{background:#ef9658}.h5{background:#e8685c}
+.layout{display:grid;gap:20px;align-items:start}
+.layout.setup{grid-template-columns:minmax(0,1.6fr) minmax(320px,1fr)}
+.layout.quiz{grid-template-columns:minmax(0,1fr) 340px}
+.layout>.sheet+.sheet{margin-top:0}
+.side{position:sticky;top:16px}
+.side .row{flex-direction:column}
+.side .radio{max-width:none;flex:none;width:100%}
+.side .row{gap:10px}
+.side .chk{margin-top:14px}
+.side .field.row{gap:0}
+.top{flex-direction:column;align-items:flex-start}
+.brand{max-width:none}
+.side .btns .btn{flex:1 1 auto}
+.layout.quiz>.sheet:first-child .qtext{max-width:none}
+.omrs{padding:20px 18px;max-height:calc(100vh - 32px);display:flex;flex-direction:column}
+.omrh{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:10px}
+.omrh h3{margin:0}
+.orows{overflow-y:auto;display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin:0 -6px;padding:0 6px}
+.orow{display:flex;align-items:center;gap:5px;border:0;background:none;padding:5px 6px;border-radius:10px;text-align:left}
+.orow:hover{background:var(--soft)}
+.orow.cur{background:var(--omr-soft);box-shadow:inset 0 0 0 1.5px var(--omr)}
+.orow .on{width:26px;font:700 12.5px var(--body);color:var(--muted);text-align:right;margin-right:2px}
+.orow i{font:700 9.5px/1 var(--body);font-style:normal;width:20px;height:20px;border-radius:50%;border:1.5px solid color-mix(in srgb,var(--omr) 45%,var(--line));color:var(--muted);display:grid;place-items:center}
+.orow i.f{background:var(--ink);border-color:var(--ink);color:var(--sheet)}
+.orow.ok i.f{background:var(--ok);border-color:var(--ok);color:#fff}
+.orow.bad i.f{background:var(--bad);border-color:var(--bad);color:#fff}
+.orow.ok .on{color:var(--ok)}.orow.bad .on{color:var(--bad)}
+.figgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:0 28px}
+.figgrid .qimg{width:100%;max-height:440px;object-fit:contain;margin-top:10px}
 .foot{margin:28px auto 0;font-size:13.5px;line-height:1.65;color:var(--muted);max-width:75ch;text-align:center}
 
+@media (max-width:1080px){
+  .layout.setup,.layout.quiz{grid-template-columns:minmax(0,1fr)}
+  .side{position:static}
+  .omrs{max-height:none}
+  .orows{grid-template-columns:repeat(auto-fill,minmax(150px,1fr));max-height:340px}
+}
 @media (max-width:640px){
+  .figgrid{grid-template-columns:minmax(0,1fr)}
+  .tabs{width:auto}
+  .tabs button{flex:1}
   .wrap{padding-top:14px}
   .top{padding:24px 20px;border-radius:20px}
   .top::before{display:none}
@@ -610,13 +649,14 @@ function setupHTML(){
   var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
   var hotCount=topics.filter(function(t){return t.n>=3}).length;
   var n=pool().length,mi=mistakes().length;
-  var h='<section class="sheet"><h2>'+esc(SUBJECTS[k].name)+' <span class="hint">'+SUBJECTS[k].code+'</span></h2>';
+  var h='<div class="layout setup"><section class="sheet"><h2>'+esc(SUBJECTS[k].name)+' <span class="hint">'+SUBJECTS[k].code+'</span></h2>';
   h+='<p class="sub">Each question shows its paper, question number and unit, plus how many times that topic has come up across the five papers.</p>';
   h+='<div class="stats"><div class="stat"><b>'+d.qs.length+'</b><span>Part A questions</span></div><div class="stat"><b>'+ps.length+'</b><span>papers</span></div><div class="stat"><b>'+topics.length+'</b><span>topics</span></div><div class="stat"><b>'+hotCount+'</b><span>topics asked 3 or more times</span></div></div>';
   h+='<div class="field"><span class="lab">Papers <span class="hint">(none selected means all)</span></span><div class="chips">'+ps.map(function(p){return '<button class="chip" data-act="tp" data-v="'+p[0]+'" aria-pressed="'+(f.papers.indexOf(p[0])>=0)+'">'+p[1]+'</button>'}).join("")+'</div></div>';
   h+='<div class="field"><span class="lab">Units</span><div class="chips">'+[1,2,3,4,5].map(function(u){return '<button class="chip" data-act="tu" data-v="'+u+'" aria-pressed="'+(f.units.indexOf(u)>=0)+'">Unit '+u+': '+esc(UNITS[k][u])+'</button>'}).join("")+'</div></div>';
   h+='<div class="field"><label for="topicsel">Topic</label><select id="topicsel" data-f="topic"><option value="">All topics</option>'+topics.map(function(t){return '<option value="'+t.id+'"'+(f.topic===t.id?' selected':'')+'>'+esc(t.name)+' ('+t.n+'×)</option>'}).join("")+'</select></div>';
-  h+='<div class="field"><span class="lab">Mode</span><div class="row">';
+  h+='</section><aside class="sheet side"><h3>Start a session</h3>';
+  h+='<div class="field" style="margin-top:6px"><span class="lab">Mode</span><div class="row">';
   h+='<label class="radio"><input type="radio" name="mode" data-f="mode" value="practice"'+(f.mode==="practice"?' checked':'')+'><span><b>Practice</b><small>See the answer and reason right after each question, and try again if you miss.</small></span></label>';
   h+='<label class="radio"><input type="radio" name="mode" data-f="mode" value="exam"'+(f.mode==="exam"?' checked':'')+'><span><b>Exam</b><small>No feedback until you finish, then a score and review.</small></span></label>';
   h+='</div></div>';
@@ -625,7 +665,7 @@ function setupHTML(){
   h+='<div class="btns"><button class="btn omr" data-act="start"'+(n?'':' disabled')+'>Start '+(n?Math.min(n,f.count||n):0)+' questions</button>';
   h+='<button class="btn alt" data-act="retryMistakes"'+(mi?'':' disabled')+'>Retry my mistakes ('+mi+')</button>';
   h+='<button class="btn alt" data-act="resetProg">Clear saved progress</button></div>';
-  h+='<p class="hint" style="margin-top:10px">'+n+' questions match your filters. Your results are saved in this browser so “Retry my mistakes” works next time too.</p></section>';
+  h+='<p class="hint" style="margin-top:10px">'+n+' questions match your filters. Your results are saved in this browser so “Retry my mistakes” works next time too.</p></aside></div>';
   return h;
 }
 
@@ -664,7 +704,17 @@ function quizHTML(){
   var last=s.i===s.list.length-1;
   h+='<button class="btn'+(locked?' omr':' alt')+'" data-act="'+(last?'finish':'next')+'">'+(last?'Finish':(locked||exam&&a.sel!==null?'Next':'Skip'))+'</button>';
   h+='<span class="hint">Keys: A to D to answer, Enter for next.</span></div></section>';
-  return h;
+  return '<div class="layout quiz">'+h+sheetHTML()+'</div>';
+}
+function sheetHTML(){
+  var s=S.sess,exam=s.mode==="exam",done=0,right=0;
+  var rows=s.list.map(function(q,i){
+    var a=s.ans[i],st="",pick=exam?a.sel:a.first;
+    if(pick===undefined)pick=null;
+    if(pick!==null){done++;if(!exam){st=pick===q.a?" ok":" bad";if(pick===q.a)right++}}
+    return '<button class="orow'+st+(i===s.i?' cur':'')+'" data-act="goto" data-v="'+i+'" aria-label="Question '+(i+1)+'"><span class="on">'+(i+1)+'</span>'+[0,1,2,3].map(function(j){return '<i class="'+(pick===j?'f':'')+'">'+"ABCD"[j]+'</i>'}).join("")+'</button>';
+  }).join("");
+  return '<aside class="sheet side omrs"><div class="omrh"><h3>Answer sheet</h3><span class="hint">'+done+'/'+s.list.length+' answered'+(exam?'':' · '+right+' right first try')+'</span></div><div class="orows">'+rows+'</div></aside>';
 }
 function resultHTML(){
   var s=S.sess,k=subj(),c=0,per={};
@@ -719,11 +769,11 @@ function bcHTML(){
   h+='</table></div></section>';
   var figs=BCFIG[k]||[];
   if(figs.length){
-    h+='<section class="sheet"><h2>Part B and C questions with figures</h2><p class="sub">Graph questions as printed in each paper, with the original figure.</p>';
+    h+='<section class="sheet"><h2>Part B and C questions with figures</h2><p class="sub">Graph questions as printed in each paper, with the original figure.</p><div class="figgrid">';
     figs.forEach(function(f){
       h+='<div class="rev"><div class="qhead"><span class="tag paper">'+esc(plabel(k,f[0]))+', Q'+esc(f[1])+'</span><span class="tag">Part '+(/^2[67]/.test(f[1])?'C':'B')+'</span></div><p style="white-space:pre-wrap"><b>'+esc(f[2])+'</b></p><img class="qimg" loading="lazy" src="'+imgSrc(f[3])+'" alt="Figure for '+esc(plabel(k,f[0]))+' Q'+esc(f[1])+'"></div>';
     });
-    h+='</section>';
+    h+='</div></section>';
   }
   return h;
 }
@@ -777,6 +827,7 @@ document.addEventListener("click",function(e){
     case "resetProg":if(window.confirm("Clear all saved results for both subjects in this browser?")){store.stats={};save();render()}break;
     case "pick":pick(+v);break;
     case "next":goto(S.sess.i+1);break;
+    case "goto":goto(+v);break;
     case "prev":goto(S.sess.i-1);break;
     case "finish":finish();break;
     case "again":var a=S.sess.ans[S.sess.i];a.sel=null;a.locked=false;render();break;
