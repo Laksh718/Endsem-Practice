@@ -1,0 +1,725 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>OMR Practice – Discrete Maths &amp; FLA past papers</title>
+<style>
+:root{
+  --desk:#dde3e8; --sheet:#fbfcfd; --ink:#1b2430; --muted:#5b6673; --line:#c9d1d9;
+  --omr:#b8326a; --omr-soft:#f6e1ea; --lead:#2a2e35; --ok:#1c8553; --ok-soft:#dff3e8; --bad:#c0392b; --bad-soft:#fbe4e1;
+  --shadow:0 1px 0 rgba(27,36,48,.06),0 8px 24px -12px rgba(27,36,48,.25);
+  --display:"Avenir Next Condensed","Arial Narrow","Helvetica Neue",Arial,sans-serif;
+  --body:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+  color-scheme:light;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --desk:#12161b; --sheet:#1a2027; --ink:#e6ebf0; --muted:#97a3b0; --line:#323b45;
+    --omr:#ef7aa1; --omr-soft:#3a2530; --lead:#e6ebf0; --ok:#4cc58a; --ok-soft:#183427; --bad:#ff8a7a; --bad-soft:#40201d;
+    --shadow:0 1px 0 rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7); color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --desk:#12161b; --sheet:#1a2027; --ink:#e6ebf0; --muted:#97a3b0; --line:#323b45;
+  --omr:#ef7aa1; --omr-soft:#3a2530; --lead:#e6ebf0; --ok:#4cc58a; --ok-soft:#183427; --bad:#ff8a7a; --bad-soft:#40201d;
+  --shadow:0 1px 0 rgba(0,0,0,.4),0 8px 24px -12px rgba(0,0,0,.7); color-scheme:dark;
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--desk)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--desk);color:var(--ink);font:16px/1.5 var(--body);min-height:100vh}
+button,select,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--omr);outline-offset:2px}
+.wrap{max-width:920px;margin:0 auto;padding:18px 16px 56px}
+.top{display:flex;flex-wrap:wrap;gap:14px 20px;align-items:flex-end;justify-content:space-between;margin-bottom:14px}
+.brand h1{margin:0;font:700 clamp(30px,6vw,44px)/1 var(--display);letter-spacing:.01em}
+.brand p{margin:6px 0 0;color:var(--muted);max-width:46ch;font-size:14px}
+.tools{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:2px solid var(--omr);border-radius:999px;overflow:hidden;background:var(--sheet)}
+.seg button{border:0;background:transparent;padding:8px 14px;font-weight:600;font-size:14px}
+.seg button[aria-pressed="true"]{background:var(--omr);color:#fff}
+.ghost{border:1.5px solid var(--line);background:var(--sheet);border-radius:999px;padding:7px 12px;font-size:13px}
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--line);margin-bottom:18px;overflow-x:auto}
+.tabs button{border:0;background:none;padding:10px 14px;font:600 15px var(--body);color:var(--muted);border-bottom:4px solid transparent;margin-bottom:-2px;white-space:nowrap}
+.tabs button[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--omr)}
+.sheet{background:var(--sheet);border:1px solid var(--line);border-radius:6px;box-shadow:var(--shadow);padding:20px 22px}
+.sheet + .sheet{margin-top:16px}
+h2{font:700 24px/1.15 var(--display);margin:0 0 4px}
+h3{font:700 18px/1.2 var(--display);margin:0 0 8px}
+.sub{color:var(--muted);font-size:14px;margin:0 0 14px}
+.stats{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0 4px}
+.stat{border:1.5px solid var(--line);border-radius:6px;padding:8px 14px;min-width:96px}
+.stat b{display:block;font:700 28px/1 var(--display)}
+.stat span{font-size:12.5px;color:var(--muted)}
+.field{margin:18px 0 0}
+.field>label,.field>.lab{display:block;font-weight:700;font-size:14px;margin-bottom:8px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--omr);background:transparent;color:var(--omr);border-radius:999px;padding:5px 12px;font-size:13.5px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--lead);border-color:var(--lead);color:var(--sheet)}
+select{width:100%;max-width:520px;padding:9px 10px;border:1.5px solid var(--line);border-radius:6px;background:var(--sheet)}
+.row{display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start}
+.radio{display:flex;gap:10px;align-items:flex-start;border:1.5px solid var(--line);border-radius:6px;padding:10px 12px;max-width:300px;cursor:pointer}
+.radio input{margin-top:4px;accent-color:var(--omr)}
+.radio small{display:block;color:var(--muted)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px;align-items:center}
+.btn{border:2px solid var(--lead);background:var(--lead);color:var(--sheet);border-radius:6px;padding:10px 20px;font-weight:700}
+.btn.alt{background:transparent;color:var(--ink)}
+.btn.omr{background:var(--omr);border-color:var(--omr);color:#fff}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.hint{font-size:13px;color:var(--muted)}
+.qhead{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px}
+.tag{display:inline-flex;gap:6px;align-items:center;border:1.5px solid var(--line);border-radius:4px;padding:2px 9px;font:600 12.5px var(--mono);background:var(--sheet)}
+.tag.paper{background:var(--lead);border-color:var(--lead);color:var(--sheet)}
+.tag.freq{border-color:var(--omr);color:var(--omr);background:var(--omr-soft)}
+.qtext{font-size:18px;line-height:1.55;margin:6px 0 16px;white-space:pre-wrap}
+.bar{height:6px;background:var(--line);border-radius:3px;overflow:hidden;margin:0 0 14px}
+.bar i{display:block;height:100%;background:var(--omr)}
+.qimg{display:block;max-width:100%;height:auto;margin:0 0 16px;border:1px solid var(--line);border-radius:6px;background:#fff;padding:6px}
+.opts{display:flex;flex-direction:column;border-top:1px dashed var(--line)}
+.opt{display:flex;gap:14px;align-items:center;text-align:left;width:100%;border:0;border-bottom:1px dashed var(--line);background:transparent;padding:11px 6px;border-radius:0}
+.opt:hover:not([disabled]){background:var(--omr-soft)}
+.opt[disabled]{cursor:default}
+.bub{flex:none;width:34px;height:34px;border-radius:50%;border:2px solid var(--omr);color:var(--omr);display:grid;place-items:center;font:700 14px var(--mono)}
+.opt .t{flex:1;font-size:16.5px}
+.opt.sel .bub{background:var(--lead);border-color:var(--lead);color:var(--sheet)}
+.opt.ok .bub{background:var(--ok);border-color:var(--ok);color:#fff}
+.opt.bad .bub{background:var(--bad);border-color:var(--bad);color:#fff}
+.opt.ok{background:var(--ok-soft)}
+.opt.bad{background:var(--bad-soft)}
+.mark{font:700 13px var(--mono);flex:none}
+.opt.ok .mark{color:var(--ok)} .opt.bad .mark{color:var(--bad)}
+.fb{margin-top:16px;border-left:5px solid var(--ok);background:var(--ok-soft);padding:10px 14px;border-radius:0 6px 6px 0}
+.fb.no{border-left-color:var(--bad);background:var(--bad-soft)}
+.fb b{display:block;margin-bottom:2px}
+.also{margin-top:12px;font-size:13.5px;color:var(--muted)}
+.also .tag{margin:3px 4px 0 0}
+.score{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.big{font:700 64px/1 var(--display)}
+.big small{font-size:28px;color:var(--muted)}
+.tb{width:100%;border-collapse:collapse;font-size:14px}
+.tb th,.tb td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+.tb th{font-weight:700;color:var(--muted);font-size:13px}
+.rev{border-top:1px dashed var(--line);padding:12px 0}
+.rev p{margin:4px 0}
+.hot{display:grid;grid-template-columns:minmax(0,1fr) auto 62px auto;gap:6px 14px;align-items:center;padding:11px 0;border-bottom:1px dashed var(--line)}
+.hot.hd{border-bottom:2px solid var(--line);padding-bottom:6px;font-size:12px;color:var(--muted);font-weight:700}
+.hot .nm{font-weight:600}
+.hot .nm small{display:block;font-weight:400;color:var(--muted);font-size:12.5px}
+.dots{display:grid;grid-template-columns:repeat(5,44px);justify-items:center;gap:0}
+.pd{width:16px;height:16px;border-radius:50%;border:2px solid var(--omr)}
+.pd.on{background:var(--lead);border-color:var(--lead)}
+.cnt{font:700 22px var(--display);text-align:right}
+.cnt small{font:500 12px var(--body);color:var(--muted);display:block;text-align:right}
+.mini{border:1.5px solid var(--omr);color:var(--omr);background:transparent;border-radius:6px;padding:5px 10px;font-weight:700;font-size:13px}
+.acc{font-size:12px;color:var(--muted)}
+.scroll{overflow-x:auto}
+.bc{border-collapse:collapse;min-width:720px;width:100%;font-size:13.5px}
+.bc th,.bc td{padding:7px 6px;border-bottom:1px solid var(--line);text-align:center}
+.bc td:first-child,.bc th:first-child{text-align:left;min-width:250px}
+.bc .u td{background:var(--lead);color:var(--sheet);font:700 15px var(--display);text-align:left;padding:8px}
+.bc .hit{background:var(--ok-soft);color:var(--ok);font:700 12.5px var(--mono);border-radius:4px}
+.bc .no{color:var(--line)}
+.heat{display:inline-block;min-width:34px;border-radius:4px;padding:2px 6px;font:700 13px var(--mono);color:#1b2430}
+.h1{background:#cfe9d8}.h2{background:#f4e08a}.h3{background:#f2b45f}.h4{background:#ef9658}.h5{background:#e8685c}
+.foot{margin-top:22px;font-size:12.5px;color:var(--muted);max-width:75ch}
+@media (max-width:640px){
+  .sheet{padding:16px 14px}
+  .hot{grid-template-columns:minmax(0,1fr) 62px auto}
+  .hot .dots{grid-column:1 / -1;order:3;justify-items:start;grid-template-columns:repeat(5,minmax(0,1fr))}
+  .hot.hd .dots{display:none}
+  .qtext{font-size:17px}
+}
+@media (prefers-reduced-motion:no-preference){
+  .opt .bub{transition:background .12s,border-color .12s}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>OMR Practice</h1>
+      <p>Past-year Part A questions from SRM papers, tagged with where they came from and how often the topic repeats. Diagram questions include the original figure.</p>
+    </div>
+    <div class="tools">
+      <div class="seg" id="subjseg" role="group" aria-label="Subject"></div>
+      <button class="ghost" data-act="theme" id="themebtn">Theme</button>
+    </div>
+  </header>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <main id="main"></main>
+  <p class="foot" id="foot"></p>
+</div>
+
+<script>
+"use strict";
+var PAPERS={
+ dm:[["N24","Nov 2024","Nov ’24"],["M25","May 2025","May ’25"],["J25","Jul 2025","Jul ’25"],["N25","Nov 2025","Nov ’25"],["M26","May 2026","May ’26"]],
+ fla:[["N24","Nov 2024","Nov ’24"],["M25","May 2025","May ’25"],["J25","Jul 2025","Jul ’25"],["D25","Dec 2025","Dec ’25"],["M26","May 2026","May ’26"]]
+};
+var SUBJECTS={dm:{name:"Discrete Mathematics",code:"21MAB302T"},fla:{name:"Formal Language & Automata",code:"21CSC301T"}};
+var UNITS={
+ dm:{1:"Set theory",2:"Combinatorics & number theory",3:"Mathematical logic",4:"Algebraic structures & coding",5:"Graph theory"},
+ fla:{1:"Finite automata & regular expressions",2:"Regular sets & context-free grammars",3:"Pushdown automata",4:"Turing machines",5:"Complexity & undecidability"}
+};
+var TOPICS={
+ dm:{
+  fn:["Functions: composition, inverse & types",1],set:["Sets & power sets",1],rel:["Relations: properties, matrices & closures",1],
+  part:["Partitions & equivalence relations",1],war:["Warshall’s algorithm",1],hasse:["Hasse diagrams & posets",1],
+  pig:["Pigeonhole principle",2],perm:["Permutations & combinations",2],ie:["Inclusion–exclusion",2],
+  fta:["Primes & fundamental theorem of arithmetic",2],gcd:["GCD, LCM & Euclid",2],
+  conv:["Converse, inverse & contrapositive",3],dual:["Duals of logical statements",3],taut:["Tautologies & logical equivalences",3],
+  incon:["Consistency of premises",3],inf:["Rules of inference & proof methods",3],ind:["Mathematical induction",3],
+  grp:["Groups: order, identity & inverse",4],cyc:["Cyclic groups & subgroups",4],permg:["Permutation groups",4],
+  ring:["Rings, integral domains & fields",4],code:["Coding: Hamming distance & codes",4],
+  eul:["Paths, circuits & Eulerian graphs",5],tree:["Trees",5],col:["Graph colouring",5],kn:["Complete graphs & edge counting",5],
+  hs:["Handshaking theorem",5],iso:["Isomorphism & basic graph terms",5]
+ },
+ fla:{
+  dfa:["DFA, NFA & ε-NFA concepts",1],re:["Regular expressions, grammars & languages",1],mm:["Moore & Mealy machines",1],
+  regset:["Properties of regular sets",2],min:["DFA minimization & equivalent states",2],norm:["CNF, GNF & grammar simplification",2],tree:["Derivation trees & parsing",2],
+  chom:["Chomsky hierarchy & grammar types",2],cfg:["CFG: strings generated",2],
+  cflp:["Closure properties of CFLs",3],pdaf:["PDA: definition, notation & ID",3],pdap:["DPDA vs NPDA & languages accepted",3],
+  tm:["Turing machine basics (tape, ID, halting, UTM)",4],rec:["Recursive & recursively enumerable languages",4],
+  tc:["Time complexity & polynomial time",5],np:["P, NP, NP-complete & NP-hard",5],dec:["Decidable & undecidable problems",5],pcp:["PCP & MPCP",5]
+ }
+};
+var SKIPPED={
+ dm:"Discrete Maths: May 2025 Q11 (no option matches the inverse as printed).",
+ fla:"FLA: Jul 2025 Q2 (the transition graph it refers to is missing from the scan), and Nov 2024 Q3, Q11, Q13 and May 2025 Q8, Q11, Q13, Q15 (the printed question has more than one defensible answer or is unclear)."
+};
+
+/* ---------- Question bank: [paper, Q no., topic, question, options, answer index, explanation] ---------- */
+var QS={};
+QS.dm=[
+["N24",1,"fn","If f : A → B and g : B → C are bijections, then g ∘ f is",["a bijection","not a bijection","only injective","only surjective"],0,"A composition of bijections is a bijection."],
+["N24",2,"set","If |A| = 6, the cardinality of the power set of A is",["64","8","32","16"],0,"2⁶ = 64."],
+["N24",3,"rel","If M_R is the matrix of a relation on A and M_R = (M_R)ᵀ, then the relation is",["symmetric","reflexive","transitive","irreflexive"],0,"A symmetric matrix means (a,b) ∈ R ⇒ (b,a) ∈ R."],
+["N24",4,"part","Which of the following forms a partition of A = {1, 2, 3}?",["{ {1,2}, {1,3} }","{ {1,2,3}, {3} }","{ {1}, {2,3} }","{ {1,2}, {2,3} }"],2,"Blocks must be non-empty, pairwise disjoint and cover A."],
+["N24",5,"pig","The minimum number of persons in a group to be sure that at least two are born in the same month is",["12","13","24","25"],1,"12 months + 1 = 13 (pigeonhole)."],
+["N24",6,"perm","Number of ways in which 7 persons can be seated round a table is",["120","720","540","480"],1,"Circular arrangements: (7 − 1)! = 720."],
+["N24",7,"fta","Every positive integer n > 1 can be written uniquely as a product of",["Positive integers","Perfect squares","Perfect cubes","Primes"],3,"Fundamental theorem of arithmetic."],
+["N24",8,"fta","If a prime number p divides a², then",["p divides a","a divides p","p does not divide a","a does not divide p"],0,"Euclid’s lemma: p | a·a ⇒ p | a."],
+["N24",9,"conv","The converse of q → p is",["p → ¬q","¬p → ¬q","p → q","¬p → q"],2,"The converse swaps hypothesis and conclusion."],
+["N24",10,"dual","The dual of Q ∨ F ≡ Q is",["Q ∨ T ≡ Q","Q ∨ F ≡ T","Q","Q ∧ T ≡ Q"],3,"Swap ∨ with ∧ and F with T."],
+["N24",11,"incon","A set of premises is said to be ______ if their conjunction implies a contradiction.",["Tautology","Inconsistent","Consistent","Universe of discourse"],1,"Premises whose conjunction implies a contradiction are inconsistent."],
+["N24",12,"taut","p → (q → p) ≡",["T","F","both T and F","neither T nor F"],0,"¬p ∨ (¬q ∨ p) = T."],
+["N24",13,"grp","In the multiplicative group G = {1, −1, i, −i}, the order of the element i is",["3","4","2","1"],1,"i, i² = −1, i³ = −i, i⁴ = 1, so the order is 4."],
+["N24",14,"cyc","Which of the following statements is true?",["Every group is abelian","Every abelian group is cyclic","Every cyclic group is abelian","Every group is cyclic"],2,"A cyclic group is generated by one element, so any two elements commute."],
+["N24",15,"cyc","Every group of prime order is",["not cyclic","cyclic","left coset","right coset"],1,"By Lagrange’s theorem any non-identity element generates the whole group."],
+["N24",16,"code","The Hamming distance H(x, y) between the codes x = 11010 and y = 10101 is",["1","2","3","4"],3,"They differ in positions 2, 3, 4 and 5."],
+["N24",17,"kn","A simple graph in which there is exactly one edge between each pair of distinct vertices is called a",["Regular graph","Bipartite graph","Complete graph","Pseudo graph"],2,"That is the definition of a complete graph."],
+["N24",18,"tree","A tree with 8 edges has",["6 vertices","7 vertices","8 vertices","9 vertices"],3,"A tree has V = E + 1 vertices."],
+["N24",19,"kn","The maximum number of edges in a complete graph with 5 vertices (K₅) is",["10","12","16","20"],0,"5·4/2 = 10."],
+["N24",20,"hs","The number of vertices of odd degree in an undirected graph is",["Zero","One","Even","Odd"],2,"Handshaking lemma: the sum of degrees is even, so odd-degree vertices come in pairs."],
+
+["M25",1,"set","The power set of {a, {b}} is",["{∅, {a}, {{b}}, {a,{b}}}","{∅, {a}, {b}, {a,{b}}}","{∅, {{b}}, {a,{b}}}","{∅, {a}, {{b}}}"],0,"A 2-element set has 2² = 4 subsets: ∅, {a}, {{b}}, {a,{b}}."],
+["M25",2,"set","If P = {1, {2}, 4} and Q = {1, 2, 4}, then",["P = Q","Q ⊆ P","P ≠ Q","P ⊆ Q"],2,"{2} is a set, not the element 2, so the sets differ."],
+["M25",3,"rel","A = {3, 4, 5} and R is the relation on A given by R = {(x, y) | x + y > 10}. Then R is",["{(3,4),(4,5),(3,5)}","A","∅","{(3,4),(4,5)}"],2,"The largest sum is 5 + 5 = 10, which is not > 10."],
+["M25",4,"fn","Let f(x) = 2x + 3 and g(x) = 3x + 2 be functions on ℝ. Then f∘g is",["3x + 7","6x + 7","6x + 11","3x + 11"],1,"f(g(x)) = 2(3x + 2) + 3 = 6x + 7."],
+["M25",5,"perm","There are 10 points in a plane, no three of which are collinear except 4 points which are collinear. The number of lines obtained from pairs of these points is",["20","30","40","50"],2,"C(10,2) − C(4,2) + 1 = 45 − 6 + 1 = 40."],
+["M25",6,"pig","If n pigeonholes are occupied by n + 1 pigeons, then some pigeonhole is occupied by (at least)",["One pigeon","Two pigeons","Three pigeons","Four pigeons"],1,"Pigeonhole principle."],
+["M25",7,"gcd","If a and b are any two non-zero integers, then gcd(a, b) is",["mn + ab","ma + nb","abmn","ab divides mn"],1,"Bézout’s identity: gcd(a, b) = ma + nb for some integers m, n."],
+["M25",8,"gcd","If a = qb + r, then",["gcd(a, r) = gcd(b, r)","gcd(a, b) = gcd(a, r)","gcd(a, r) = gcd(q, r)","gcd(a, b) = gcd(b, r)"],3,"This is the step Euclid’s algorithm repeats."],
+["M25",9,"inf","A premise may be introduced at any point in the derivation. This is called",["Rule P","Rule P and rule T","Rule T","Rule CP"],0,"Rule P allows a premise at any step; Rule T introduces a formula implied by earlier ones."],
+["M25",10,"dual","The dual of (P ∧ Q) ∨ T is",["(P ∧ Q) ∧ T","(P ∨ Q) ∧ T","(P ∨ Q) ∧ F","(P ∧ Q) ∨ F"],2,"Swap ∧ with ∨ and T with F. (Options A and B are transcribed from a scan and may differ slightly.)"],
+["M25",12,"taut","Which of the following propositions is a tautology?",["(p ∨ q) → p","p ∨ (q → p)","p ∨ (p → q)","p → (p → q)"],2,"p ∨ (¬p ∨ q) = T."],
+["M25",13,"grp","In the group G = {1, −1, i, −i} under multiplication, the order of the element i is",["1","2","3","4"],3,"i⁴ = 1 and no smaller positive power gives 1."],
+["M25",14,"permg","In the permutation group S₃, if p maps a → b, b → c, c → a, then the inverse of p is",["a → c, b → a, c → b","a → a, b → c, c → b","a → b, b → c, c → a","a → b, b → a, c → c"],0,"Reverse every arrow: b → a, c → b, a → c."],
+["M25",15,"cyc","A subgroup of (ℝ, +) is",["(ℝ, −)","(ℚ, ·)","(ℤ⁺, +)","(ℤ, +)"],3,"ℤ is closed under + and has 0 and inverses; ℤ⁺ has no identity."],
+["M25",16,"grp","The inverse element in a group (G, *) with binary operation a * b = a + b + 2 is",["−a","−(a + 4)","−2","−4"],1,"Identity e = −2. Solve a + a′ + 2 = −2 to get a′ = −(a + 4)."],
+["M25",17,"col","The chromatic number of the graph shown in the figure (six vertices arranged in a hexagon) is",["1","2","3","4"],1,"The graph has no odd cycle (at most a 6-cycle), so it is bipartite and 2 colours suffice.","dm_m25_q17.png"],
+["M25",18,"iso","______ graphs satisfy the invariant property.",["Homomorphic","Eulerian","Isomorphic","Hamiltonian"],2,"Isomorphic graphs share invariants such as vertex count, edge count and degree sequence."],
+["M25",19,"tree","A connected graph without any circuit is called",["Loop","Tree","Leaf","Forest"],1,"That is the definition of a tree."],
+["M25",20,"iso","A vertex which is not adjacent to any other vertex is called ______ vertex",["Isolated","Pendant","Incident","Simple"],0,"An isolated vertex has degree 0."],
+
+["J25",1,"set","A − B = B − A if and only if",["A ⊂ B","B ⊂ C","A or B = φ","A = B"],3,"A − B and B − A are disjoint, so equality forces both to be empty, which means A = B."],
+["J25",2,"rel","R = {(6,2), (8,2), (10,2)} is a relation from B = {6, 8, 10} to A = {2, 3, 5}. Then R⁻¹ is",["{(2,6),(3,8),(5,10)}","{(2,8),(3,6),(5,10)}","{(10,2),(8,3),(6,5)}","{(2,6),(2,8),(2,10)}"],3,"Reverse each ordered pair."],
+["J25",3,"war","Warshall’s algorithm is applied to construct",["Symmetric closure","Transitive closure","Reflexive closure","Anti-symmetric closure"],1,"Warshall’s algorithm computes the transitive closure."],
+["J25",4,"fn","If f : ℝ → ℝ is given by f(x) = 3x − 7, then f⁻¹ is",["7y − 3","3y + 7","(y + 7)/3","(y − 7)/3"],2,"y = 3x − 7 gives x = (y + 7)/3."],
+["J25",5,"perm","From a club of 6 men and 7 women, in how many ways can we select a committee of 3 men and 4 women?",["750","700","850","600"],1,"C(6,3) × C(7,4) = 20 × 35 = 700."],
+["J25",6,"pig","If n pigeonholes are occupied by kn + 1 pigeons, where k is a positive integer, then at least one pigeonhole is occupied by",["k pigeons","k + 1 pigeons","k − 2 pigeons","k − 3 pigeons"],1,"Generalised pigeonhole principle."],
+["J25",7,"ie","Among 30 Computer Science students, 15 know JAVA, 12 know C++ and 5 know both. How many students know exactly one of the languages?",["27","22","17","5"],2,"(15 − 5) + (12 − 5) = 17."],
+["J25",8,"gcd","If the LCM of two numbers is 14 and the GCD is 1, then the product of the two numbers is",["14","15","7","49"],0,"Product = GCD × LCM = 14."],
+["J25",9,"taut","The statement P ∨ ¬P is a",["contradiction","tautology","contrapositive","inverse"],1,"It is true for every truth value of P."],
+["J25",10,"dual","The dual of ¬P → (P → Q) is",["P ∨ (¬P ∧ Q)","¬(¬P) ∧ (¬P ∧ Q)","P → ¬(P → Q)","(¬P ∧ Q) ∧ ¬P"],1,"Rewrite as ¬¬P ∨ (¬P ∨ Q), then swap ∨ with ∧ to get ¬(¬P) ∧ (¬P ∧ Q)."],
+["J25",11,"conv","The contrapositive of p → q is",["q → p","~q → p","~q → ~p","q → ~p"],2,"Negate and swap: ¬q → ¬p."],
+["J25",12,"ind","For each n ∈ ℕ, 3²ⁿ − 1 is divisible by",["8","16","32","18"],0,"3²ⁿ − 1 = 9ⁿ − 1 and (9 − 1) divides 9ⁿ − 1. For n = 1 it equals 8, so 16 fails."],
+["J25",13,"grp","The identity element in the group G = {2, 4, 6, 8} under multiplication modulo 10 is",["5","9","6","12"],2,"6 × 2 = 12 ≡ 2, 6 × 4 = 24 ≡ 4, and so on."],
+["J25",14,"grp","Let G be a group. If a, b ∈ G, then the inverse of (a * b) is",["a⁻¹ * b⁻¹","a * b⁻¹","a⁻¹ * b","b⁻¹ * a⁻¹"],3,"(ab)⁻¹ = b⁻¹a⁻¹ (socks and shoes)."],
+["J25",15,"cyc","Every sub-group of a cyclic group is",["Homomorphic","Cyclic","Isomorphic","Abelian"],1,"Standard theorem: subgroups of cyclic groups are cyclic."],
+["J25",16,"code","The Hamming distance between the codes x = 010000 and y = 000101 is",["3","2","6","5"],0,"They differ in positions 2, 4 and 6."],
+["J25",17,"kn","The maximum number of edges in a simple graph with n vertices is",["n(n − 1)/2","n(n + 1)/2","(n + 1)(n − 1)/2","n/2"],0,"C(n, 2)."],
+["J25",18,"eul","A connected graph is an Euler graph if and only if each of its vertices is of",["Odd degree","Even degree","Equal degree","Increasing degree"],1,"Euler circuit condition: every vertex has even degree."],
+["J25",19,"tree","Any connected graph with n vertices and n − 1 edges is",["Graph","Closed graph","Tree","Spanning tree"],2,"A connected graph with E = V − 1 is a tree."],
+["J25",20,"col","The chromatic number of the null graph is",["4","2","3","1"],3,"No edges, so one colour is enough."],
+
+["N25",1,"rel","A relation R on the set A = {1, 2, 3} defined by R = {(1,2), (2,3), (1,3)} is",["Transitive","Symmetric but not anti-symmetric","Reflexive and transitive","Reflexive and symmetric"],0,"(1,2) and (2,3) give (1,3), which is present. It is not reflexive and not symmetric."],
+["N25",2,"fn","Let f(x) = 2x + 3 and g(x) = x². Then (f ∘ g)(x) equals",["(2x + 3)²","2(x + 3)²","2x² + 3","2x² + 9"],2,"f(g(x)) = 2x² + 3."],
+["N25",3,"fn","Let f : ℕ → ℕ be defined by f(x) = x + 5. Which of the following holds?",["Injective but not surjective","Surjective but not injective","Bijective","Neither injective nor surjective"],0,"One-to-one, but 1 to 5 are never hit."],
+["N25",4,"rel","If the matrix of relation R on {1, 2, 3} is M_R = [1 1 0 / 1 1 0 / 0 0 1], then R is",["Reflexive and symmetric, not transitive","Reflexive and transitive, not symmetric","Reflexive, symmetric and transitive","Not reflexive"],2,"Diagonal all 1 (reflexive), matrix equals its transpose (symmetric), and 1R2, 2R1 ⇒ 1R1 etc. (transitive). It is an equivalence relation."],
+["N25",5,"perm","How many different 7-letter words can be formed using the letters of the word “SUCCESS”?",["7!/(3!·2!·2!)","7!/(3!·2!)","7!/(2!·2!)","7!/(4!·2!)"],1,"S appears 3 times and C twice."],
+["N25",6,"perm","10 people are seated around a circular table (4 men and 6 women). In how many ways can they sit if all 4 men sit together?",["4!·5!","4!·6!","6!·5!","7!·4!"],1,"Treat the men as one block: 7 objects in a circle gives 6!, and the men arrange themselves in 4! ways."],
+["N25",7,"pig","Each student is assigned a grade from A, B, C, D and F. What is the minimum number of students needed to guarantee that at least 7 students receive the same grade?",["30","32","31","35"],2,"5 × 6 + 1 = 31."],
+["N25",8,"gcd","If gcd(72, x) = 36 and lcm(72, x) = 216, then x is",["48","72","144","108"],3,"x = (36 × 216)/72 = 108."],
+["N25",9,"taut","The statement “It is not true that both Anna and Bob are attending the meeting” is logically equivalent to",["Anna is not attending or Bob is not attending","Anna is not attending and Bob is not attending","If Anna is attending, then Bob is not","Anna is attending but Bob is not"],0,"De Morgan: ¬(A ∧ B) ≡ ¬A ∨ ¬B. Option C is also equivalent, but A is the direct form and the likely key."],
+["N25",10,"conv","Which of the following is the inverse of the statement “I come to class whenever there is going to be a quiz”?",["If I do not come to class, then there is no quiz","If there is no quiz, then I do not come to class","If I come to class, then there is a quiz","If there is a quiz, then I come to class"],1,"Original: quiz → class. Inverse: ¬quiz → ¬class."],
+["N25",11,"inf","Which rule of inference is used in this argument? “It is either colder than Himalaya or the pollution is harmful. It is hotter than Himalaya today. Therefore, the pollution is harmful.”",["Conjunction","Modus ponens","Disjunctive syllogism","Hypothetical syllogism"],2,"p ∨ q, ¬p ⊢ q."],
+["N25",12,"ind","In the inductive step of mathematical induction, what do we assume?",["The statement is true for the base case n = 1","The statement is false for all n","The statement is true for some arbitrary natural number n = k","The statement is true for n = k + 1"],2,"Assume P(k), then prove P(k + 1)."],
+["N25",13,"cyc","Let H be a non-empty subset of G. H is a subgroup if, for all a, b ∈ H,",["ab ∈ H","ab⁻¹ ∈ H","a²b ∈ H","a + b ∈ H"],1,"One-step subgroup test: ab⁻¹ ∈ H."],
+["N25",14,"permg","The order of the symmetric group Sₙ is",["n","n²","n!","2ⁿ"],2,"There are n! permutations of n objects."],
+["N25",15,"ring","An integral domain is a",["Ring with unity and commutative, having no zero divisors","Ring without identity","Ring in which every nonzero element does not have a multiplicative inverse","Non-commutative ring"],0,"Commutative ring with unity and no zero divisors."],
+["N25",16,"code","If a code has minimum Hamming distance d_min = 5, how many errors can it correct?",["1","2","3","4"],1,"⌊(d_min − 1)/2⌋ = 2."],
+["N25",17,"eul","A connected graph contains an Eulerian circuit iff",["Every vertex has odd degree","Exactly two vertices have odd degree","Every vertex has even degree","It is complete"],2,"Euler’s theorem."],
+["N25",18,"kn","How many edges are there in a complete graph K₉?",["10","20","25","36"],3,"C(9,2) = 36."],
+["N25",19,"col","The minimum number of colours required to colour the vertices of a graph so that no two adjacent vertices share a colour is called",["Degree of the graph","Chromatic number","Clique number","Spanning number"],1,"That is the chromatic number."],
+["N25",20,"tree","A tree is always",["Disconnected","Connected and acyclic","Disconnected and cyclic","Connected and cyclic"],1,"Definition of a tree."],
+
+["M26",1,"set","Given U = {1, 2, …, 10}, A = {1,2,3,4,5}, B = {1,2,4,8}, C = {1,2,3,5,7} and D = {2,4,6,8}, then (B − C) − D is",["{2,4,8}","∅","{4,8}","{1,2,3,5}"],1,"B − C = {4, 8}; removing D = {2,4,6,8} leaves ∅."],
+["M26",2,"rel","The reflexive closure of the relation R = {(1,1), (1,3), (2,1), (3,3)} on A = {1, 2, 3} is",["{(1,1),(1,2),(1,3),(3,1),(2,1),(3,3)}","{(1,1),(1,3),(2,1),(3,1),(3,3)}","{(1,1),(1,3),(2,1),(2,2),(3,3)}","{(1,1),(1,3),(2,1),(3,2),(3,3)}"],2,"Only (2,2) is missing from the diagonal."],
+["M26",3,"part","Every partition of a set determines",["a function","a permutation","an equivalence relation","a bijection"],2,"Elements in the same block are related, which gives an equivalence relation."],
+["M26",4,"hasse","In a Hasse diagram, the reflexive and transitive edges are",["Explicitly drawn","Dotted","Omitted","Coloured"],2,"A Hasse diagram leaves out loops and implied edges."],
+["M26",5,"perm","The number of arrangements of all the six letters in the word PEPPER is",["720","360","120","60"],3,"6!/(3!·2!) = 60."],
+["M26",6,"fta","The number of prime numbers is",["finite","infinite","equal to the number of even numbers","100"],1,"Euclid’s proof shows there are infinitely many primes."],
+["M26",7,"gcd","If gcd(a, b) = 1, then for any integer c,",["gcd(ac, b) = gcd(c, b)","gcd(ac, b) = gcd(a, b)","gcd(ac, b) = c·gcd(a, b)","gcd(ac, b) = −gcd(c, b)"],0,"Since a has no common factor with b, multiplying by a does not change the gcd with b."],
+["M26",8,"fta","Every integer n > 1 can be written uniquely as a product of prime numbers. This statement is known as",["Euclid lemma","Division algorithm","Fundamental theorem of arithmetic","Divisibility rule"],2,"Definition."],
+["M26",9,"taut","The statement (p → ¬p) → ¬p is",["Tautology","Contradiction","Duality","Equivalence"],0,"p → ¬p ≡ ¬p, so the statement is ¬p → ¬p, which is always true."],
+["M26",10,"taut","Which of the following represents the absorption law?",["p ∨ (p ∧ q) ≡ p","p ∨ p ≡ p","p ∨ T ≡ T","¬p ∨ (p ∧ q) ≡ p"],0,"Absorption: p ∨ (p ∧ q) ≡ p."],
+["M26",11,"inf","The rules of inference are only means used to draw a conclusion from a set of premises in a finite sequence of steps, called",["A proposition","Argument","Tautology","Formal proof"],3,"A step-by-step derivation using rules of inference is a formal proof."],
+["M26",12,"inf","Which of the following is NOT a direct proof technique?",["Algebraic manipulation","Logical deduction","Proof by contradiction","Applying definitions"],2,"Proof by contradiction is an indirect method."],
+["M26",13,"permg","The identity element in a permutation group is",["The transposition","The cycle","The permutation that leaves every element fixed","The inverse permutation"],2,"The identity permutation fixes every element."],
+["M26",14,"ring","A commutative ring with unity and no zero divisors is called",["Field","Integral domain","Group","Module"],1,"A field needs inverses for every non-zero element as well."],
+["M26",15,"code","The codes obtained by introducing additional digits called parity digits to the digits in the original message are called",["Cyclic codes","Linear block codes","Hamming codes","Convolutional codes"],1,"Parity digits appended to blocks of message digits give block (group) codes."],
+["M26",16,"cyc","Every subgroup of a cyclic group is",["non-cyclic","cyclic","infinite","normal only"],1,"Standard theorem."],
+["M26",17,"hs","The Handshaking Theorem applies to",["Directed graphs only","Undirected graphs","Weighted graphs only","Trees only"],1,"Sum of degrees = 2 × number of edges, for undirected graphs."],
+["M26",18,"eul","A circuit is",["A path with no repeated vertices","A closed walk with no repeated edges","A graph with only one vertex","A complete graph"],1,"A circuit is a closed trail."],
+["M26",19,"eul","Which of the following graphs is NOT Eulerian?",["A cycle graph","A complete graph with an odd number of vertices","A tree with more than two vertices","A graph with all vertices of degree 4"],2,"A tree has leaves of degree 1 (odd)."],
+["M26",20,"col","A graph that can be coloured using only two colours is called",["Complete graph","Bipartite graph","Regular graph","Eulerian graph"],1,"2-colourable ⇔ bipartite."]
+];
+
+QS.fla=[
+["N24",1,"re","S1: { 0²ⁿ, n ≥ 1 } is a regular language. S2: { 0ᵐ1ⁿ0ᵠ, m ≥ 1, n ≥ 1, q ≥ 1 } is a regular language. Which option is correct?",["Only S1 is correct","Only S2 is correct","Both S1 and S2 are correct","Neither S1 nor S2 is correct"],2,"S1 = (00)⁺ and S2 = 0⁺1⁺0⁺, both regular."],
+["N24",2,"dfa","What is the important mechanism of a finite automaton?",["Generation of sentences","Recognition of languages","Grammar generation","Checking the numerical values"],1,"Automata recognise (accept or reject) strings."],
+["N24",4,"dfa","The transition function of a deterministic finite automaton takes a state and an input symbol as arguments and returns a",["Input symbol","State","Output","Value"],1,"δ : Q × Σ → Q."],
+["N24",5,"pdap","The language accepted by a pushdown automaton is described as",["Context free","Regular","Recursive","Context aware"],0,"PDAs accept exactly the context-free languages."],
+["N24",6,"cflp","The class of context-free languages is not closed under",["Concatenation","Intersection","Union","Minus"],1,"CFLs are closed under union, concatenation and star, but not intersection or complement. Difference also fails, but B is the standard textbook answer."],
+["N24",7,"re","Let A = {a, b} and L = {A}*. Consider X = { aⁿbⁿ⁺², n > 0 }. The languages L ∪ X and X are respectively",["Regular, Regular","Not regular, Not regular","Not regular, Regular","Regular, Not regular"],3,"L = {a,b}* contains every string, so L ∪ X = {a,b}* is regular. X needs counting, so it is not regular."],
+["N24",8,"chom","Match the type of grammar according to the Chomsky hierarchy: 1) Type 0, 2) Type 1, 3) Type 2, 4) Type 3 with i) Regular, ii) Context-sensitive, iii) Unrestricted, iv) Context-free.",["1-iii, 2-ii, 3-iv, 4-i","1-iv, 2-iii, 3-ii, 4-i","1-i, 2-ii, 3-iii, 4-iv","1-ii, 2-iii, 3-iv, 4-i"],0,"Type 0 = unrestricted, Type 1 = context-sensitive, Type 2 = context-free, Type 3 = regular."],
+["N24",9,"pdaf","The idea of an automaton with a stack as auxiliary storage is",["Finite automata","Pushdown automata","Deterministic automata","Linear bound automata"],1,"Definition of a pushdown automaton."],
+["N24",10,"tree","The most suitable data structure to represent the derivations in parsing is",["Queue","Linked list","Tree","Hash tables"],2,"Derivations form a parse (derivation) tree."],
+["N24",12,"pdaf","In pushdown automata notation, what does the symbol Z₀ represent?",["An element of state","Initial stack symbol","Final state","Top stack alphabet"],1,"Z₀ is the initial stack symbol."],
+["N24",14,"tm","A Turing machine operates over",["Infinite memory tape","Finite memory tape","No memory tape","Queue memory"],0,"The tape is unbounded in one or both directions."],
+["N24",15,"tm","Which function is NOT performed by the Turing machine after reading a symbol?",["Writes the symbol","Moves the tape one cell left/right","Proceeds with next instruction or halts","Jumps ‘n’ cells at a time"],3,"A TM moves the head one cell per step."],
+["N24",16,"tm","Halting states of the Turing machine are",["Start and stop","Accept and reject","Start and reject","Reject and allow"],1,"A TM halts by entering the accept or reject state."],
+["N24",17,"dec","If a problem has an algorithm to answer it, we call it",["Decidable","Solved","Recognizable","Algorithmic"],0,"A problem with an always-halting algorithm is decidable."],
+["N24",18,"np","How many stages are involved in the non-deterministic algorithm?",["3","1","2","5"],2,"Two stages: guessing and verification."],
+["N24",19,"np","CNF-Satisfiability problem belongs to",["NP class","P class","NP-Complete","NP-Hard"],2,"Cook–Levin theorem: SAT is NP-complete. It is also in NP and NP-hard, but NP-complete is the most precise answer."],
+["N24",20,"tc","The choice of polynomial class has led to the development of an extensive theory called",["Computational complexity","Time complexity","Problem complexity","Decision complexity"],0,"Computational complexity theory."],
+
+["M25",1,"re","Which of the following pairs of regular expressions are NOT equivalent?",["1(01)* and (10)*1","x(xx)* and (xx)*x","(ab)* and a*b*","x⁺ and x*x⁺"],2,"(ab)* accepts “abab”, which a*b* does not."],
+["M25",2,"dfa","The minimum number of states required in a DFA (along with the dead state) to check whether the 3rd bit is 1 or not for |n| ≥ 3 over {0,1} is",["3","4","5","1"],2,"Three states to count the first three bits, one accepting sink and one dead sink: 5."],
+["M25",3,"dfa","The reverse of a DFA can be formed by",["making the final state non-final","making final states the starting state and the starting state the final state (and reversing the edges)","using PDA","None of the mentioned"],1,"Reverse all edges and swap the roles of start and final states."],
+["M25",4,"dfa","The expressive power of NFA and ε-NFA is",["Different","Same","ε-NFA is more powerful","NFA is more powerful"],1,"Both accept exactly the regular languages."],
+["M25",5,"tc","The maximum number of steps that machine M takes on any input of size N is",["Time complexity","Space complexity","Time-space complexity","None"],0,"That is the definition of time complexity."],
+["M25",6,"tc","If the number of steps required to solve a problem is O(Nᵏ), then the problem is said to be solved in",["Non-polynomial time","Polynomial time","Infinite time","None of the mentioned"],1,"Nᵏ is polynomial."],
+["M25",7,"pdaf","Which type of symbols does the stack of a PDA contain?",["Variable","Terminal","Epsilon","Variable and Terminal"],3,"The stack alphabet Γ may include both variables and terminals (as in CFG-to-PDA conversion)."],
+["M25",9,"pdaf","The symbol Z₀ in a PDA definition denotes",["Initial state","Initial stack alphabet","Variable","Stack content"],1,"Z₀ is the start symbol of the stack."],
+["M25",10,"pdap","A pushdown machine represents",["Type 3 grammar","Type 2 grammar","Type 1 grammar","Type 0 grammar"],1,"PDAs correspond to context-free (Type 2) grammars."],
+["M25",12,"norm","Given the grammar G: 1. S → AS 2. S → AAS 3. S → SA 4. A → aa. Which productions violate the CNF format?",["2, 4","1, 3","1, 2, 3, 4","2, 3, 4"],0,"CNF allows only A → BC or A → a. S → AAS has three variables and A → aa has two terminals."],
+["M25",14,"norm","Given grammar G: S → aA, A → a, A → B, B → A, B → bb. Which of the following is the simplified grammar?",["S → aA, A → a | bb, B → a | bb","S → aA, A → a, B → bb","S → aA, A → a, B → A | bb","S → aA, A → B, B → A, B → bb"],0,"Eliminating unit productions A → B and B → A gives A → a | bb and B → a | bb. (B is then unreachable, but A is the intended key.)"],
+["M25",16,"rec","Recursively enumerable languages are closed under",["Union only","Intersection only","Both union and intersection","Neither union nor intersection"],2,"RE languages are closed under union and intersection (but not complement)."],
+["M25",17,"dec","The problems which have no algorithm, regardless of whether or not they are accepted by a Turing machine that fails to halt on some input, are referred to as",["Decidable","Undecidable","Computable","Finite"],1,"No algorithm that always halts means undecidable."],
+["M25",18,"tm","A Turing machine uses",["Binary representation","Ternary representation","Unary representation","Normal representation"],2,"In this course, TM computations are written in unary."],
+["M25",19,"np","Which of the following problems is NOT NP-hard?",["Hamiltonian circuit problem","The 0/1 Knapsack problem","Finding bi-connected components of a graph","The graph colouring"],2,"Bi-connected components can be found in linear time."],
+["M25",20,"tm","If δ(q, a) = (p, y, R), then",["qabxcd ⊢ ypbxcd","qabxcd ⊢ ybpxcd","qabxcd ⊢ apybxcd","qabxcd ⊢ pybxcd"],0,"Write y over a, move right and enter state p: y p b x c d."],
+
+["J25",1,"dfa","Statement 1: The initial state of an NFA is the initial state of the DFA. Statement 2: The final states of the DFA will be every combination of final states of the NFA. Which option is correct?",["Statement 1 is true and Statement 2 is true","Statement 1 is true and Statement 2 is false","Statement 1 can be true and Statement 2 is true","Statement 1 is false and Statement 2 is also false"],1,"The DFA start state is {q₀}. DFA final states are subsets containing at least one NFA final state, not every combination."],
+["J25",3,"dfa","Examine the DFA in the figure. If the input is 011100101, which edge is NOT traversed?",["AB","C","CD","DA"],2,"Trace: A –0→ B –1→ D –1→ B –1→ D –0→ A –0→ B –1→ D –0→ A –1→ C. Edges used: AB, BD, DB, DA, AC. The edge C→D is never used because the input ends in state C.","fla_j25_q3.png"],
+["J25",4,"mm","Find the output string for the input 0010 from the following Mealy machine (start state q1; entries are next state/output).\nq1: 0 → q3/0, 1 → q2/0\nq2: 0 → q1/1, 1 → q4/0\nq3: 0 → q2/1, 1 → q1/1\nq4: 0 → q4/1, 1 → q3/0",["1000","0101","1010","1001"],1,"q1 –0→ q3 (0), q3 –0→ q2 (1), q2 –1→ q4 (0), q4 –0→ q4 (1): 0101."],
+["J25",5,"min","A deterministic finite automaton D with alphabet {a, b} is given in the figure (top). Which of the finite state machines A to D is a valid minimal DFA that accepts the same language as D?",["Machine A","Machine B","Machine C","Machine D"],0,"In D, states s and t are both accepting sinks (they loop on a, b), so they merge into one. That leaves p, q, r (dead) and a single accepting sink s, with p –a→ s, p –b→ q, q –a→ s, q –b→ r. This is machine A.","fla_j25_q5.png"],
+["J25",7,"min","How many states are required to construct a minimal DFA from the DFA in the figure?",["2","3","4","5"],1,"The three double-circled states (the two unlabelled ones and e) all go to a final state on 0 and to f on 1, so they are equivalent. States a and b are equivalent too. Classes: {a, b}, {the three final states}, {f}. That gives 3 states.","fla_j25_q7.png"],
+["J25",6,"re","Which one of the following languages over the alphabet {0,1} is described by the regular expression (0+1)*0(0+1)*0(0+1)*?",["The set of all strings containing the substring 00","The set of all strings containing at most two 0’s","The set of all strings containing at least two 0’s","The set of all strings that begin and end with either 0 or 1"],2,"Two 0’s with anything in between and around."],
+["J25",8,"norm","In conversion from CFG to CNF, the number of non-terminals to be introduced for the terminals in S → ABa, A → aab, B → Ac is",["2","3","4","1"],1,"One new variable each for a, b and c."],
+["J25",9,"re","The following production rules of a regular grammar generate a language L: S → aS | bS | a | b. The regular expression of L is",["a + b","(a + b)(a + b)*","(a + b)*","(aa + bb)a*b*"],1,"All non-empty strings over {a, b}."],
+["J25",10,"pdaf","Which automaton takes a stack as storage?",["Finite automata","Regular expression","Push down automata","Turing machine"],2,"PDA = finite control + stack."],
+["J25",11,"pdap","Push down automata accept ______ languages.",["Type 3","Type 2","Type 1","Type 0"],1,"Context-free = Type 2."],
+["J25",12,"pdap","Which of the following languages cannot be accepted by a PDA?",["L = aⁿbⁿ⁺ᵐcᵐ | n, m ≥ 1","L = aⁿbᵐcᵐdⁿ | n, m ≥ 1","L = aⁿbⁿcᵐdᵐ | n, m ≥ 1","L = aⁿbⁿcⁿ | n ≥ 1"],3,"aⁿbⁿcⁿ needs two independent comparisons, which is not context-free."],
+["J25",13,"pdap","The language L = {0ⁱ1²ⁱ | i ≥ 0} over the alphabet {0, 1, 2} is",["Not recursive","Recursive and deterministic CFL","Regular","CFL but not deterministic CFL"],1,"Push two symbols per 0, pop one per 1: a DPDA works, so it is a DCFL and hence recursive."],
+["J25",14,"pdap","Consider L1 = {0ⁿ1ⁿ | n ≥ 0}, L2 = {wcwᴿ | w ∈ {a,b}*}, L3 = {wwᴿ | w ∈ {a,b}*}. Which of these are deterministic context-free languages?",["Only L3","Only L1","Only L1 and L2","All three languages"],2,"L3 needs to guess the middle, so it needs non-determinism."],
+["J25",15,"tm","Halting states of a Turing machine are",["Start and stop","Accept and reject","Start and reject","Reject and allow"],1,"Accept and reject."],
+["J25",16,"rec","Which of the following is true for the language { aᵖ | p is a prime }?",["It is regular but not context-free","It is neither regular nor context-free, but accepted by a Turing machine","It is not accepted by a Turing machine","It is context-free but not regular"],1,"Primality needs more than a stack but is decidable by a TM."],
+["J25",17,"pdap","Which of the following conversions is not possible (algorithmically)?",["Regular grammar to context-free grammar","Non-deterministic pushdown automata to deterministic pushdown automata","Non-deterministic finite state automata to deterministic finite state automata","Non-deterministic Turing machine to deterministic Turing machine"],1,"NPDAs are strictly more powerful than DPDAs."],
+["J25",18,"rec","Which of the following is true?",["The complement of a recursive language is either recursive or recursively enumerable","The complement of a recursively enumerable language is recursively enumerable","The complement of a recursive language is recursive","The complement of a context-free language is context-free"],2,"Recursive languages are closed under complement. RE and CFLs are not."],
+["J25",19,"rec","If L and L′ are recursively enumerable, then L is",["Regular","Context-free","Recursive","Context-sensitive"],2,"If both L and its complement are RE, then L is recursive."],
+["J25",20,"dec","Which of the following problems is solvable?",["Determining whether a universal Turing machine and some input will halt","Determining whether an arbitrary Turing machine is a universal Turing machine","Determining whether a universal Turing machine can be written with fewer than k instructions for some k","Writing a universal Turing machine"],3,"Constructing a UTM is possible. The first two are undecidable. The third is not a standard solvable problem, so D is the intended key."],
+
+["D25",1,"dfa","Which of the following is NOT a property of a finite automata?",["The NFA and DFA that recognize the same language are equal in power","Finite automata can recognize a class of languages called regular languages","Finite automata has stack as memory to store information","Minimization of a DFA reduces the number of states while preserving the language"],2,"Finite automata have no stack."],
+["D25",2,"dfa","Let R be the regular expression (ab|a)*. Which one of the following is true?",["Both DFA and NFA can be constructed for R, and they are equivalent","Only ε-NFA can be built for R","DFA requires infinitely many states","There exists an NFA for R but no DFA"],0,"Every regular expression has an equivalent NFA and DFA."],
+["D25",3,"re","Consider the regular expression R. Which one of the following regular expression identities is correct?",["(R*)⁺ = R*","R(R⁺) = R*","(R*)⁺ = R⁰","(R*) = R¹"],0,"R* already contains ε and is closed under concatenation."],
+["D25",4,"dfa","The DFA M = ({q0,q1,q2}, {a,b}, δ, q0, {q2}) has δ: (q0,a)=q1, (q0,b)=q0, (q1,a)=q1, (q1,b)=q2, (q2,a)=q1, (q2,b)=q0. The input accepted by the DFA is",["aaba","abb","aab","ababb"],2,"The DFA accepts strings ending in “ab”. For aab: q0 → q1 → q1 → q2."],
+["D25",5,"chom","The context free language is generated by ______ grammar",["Type 3","Type 2","Type 1","Type 0"],1,"Type 2."],
+["D25",6,"regset","Which of the following is NOT correct about regular sets?",["Union is associative and commutative","Concatenation is associative and commutative","The set {ε} is the identity for concatenation","Concatenation distributes over union"],1,"Concatenation is associative but not commutative."],
+["D25",7,"norm","Which of the following productions is in Chomsky Normal Form (CNF)?",["a → AA","D → aDD","A → aB","D → AB"],3,"CNF allows only A → BC or A → a."],
+["D25",8,"tree","In a parse tree for strings in a context free grammar, a leaf node always represents",["terminals","variables","start symbols","production rules"],0,"Leaves are terminals (or ε)."],
+["D25",9,"pdaf","Which of the following is a correct representation of the transition function of a push down automata?",["δ : Q × (Σ ∪ {ε}) × Γ → Q × Γ*","δ : Q × (Σ ∪ {ε}) → Q × Γ*","δ : Q × (Σ ∪ {ε}) × Γ → Q","δ : Q × (Σ ∪ {ε}) × Γ → Γ*"],0,"State, input (or ε) and stack top give a new state and a string to push."],
+["D25",10,"pdaf","Which of the following triplets correctly represents an instantaneous description of a PDA, where q is the state of the control unit, w is the unread part of the input string and u is the stack content?",["(u, q, w)","(q, u, w)","(w, q, u)","(q, w, u)"],3,"The ID is (state, unread input, stack)."],
+["D25",11,"pdap","The transition function δ(q0, a, 0) = {(q0, 10), (q1, ε)} represents a",["Deterministic Push Down Automata","Deterministic Finite Automata","Non-deterministic Finite Automata","Non-Deterministic Push Down Automata"],3,"Two possible moves for the same configuration make it non-deterministic."],
+["D25",12,"pdaf","After the execution of δ(q0, a, b) = {(q2, cd)}, which symbol is on the top of the stack?",["d","c","Z₀","ε"],1,"The pushed string cd is written with its left end on top, so c is on top."],
+["D25",13,"tm","A Universal Turing Machine is capable of",["Solving only arithmetic functions","Working only as a Mealy machine","Simulating any other Turing machine","Accepting only regular languages"],2,"A UTM takes an encoded TM and an input and simulates it."],
+["D25",14,"dec","The Halting Problem for Turing Machines is",["Decidable","Undecidable","Regular","Context free"],1,"Turing proved it undecidable."],
+["D25",15,"rec","Recursively enumerable languages are closed under",["Complement","Union but not intersection","Intersection but not union","Union and Intersection"],3,"RE languages are closed under union and intersection but not complement."],
+["D25",16,"np","If a non-deterministic Turing Machine runs in polynomial time with respect to input length, then the language it decides belongs to",["P","NP-Hard","NP-Complete","NP"],3,"NP is the class of languages decided by an NTM in polynomial time."],
+["D25",17,"np","Which of the following is TRUE about complexity classes?",["Every NP-Complete problem is NP-Hard and belongs to NP","NP-Hard ⊆ P","NP-Complete ⊆ P","Every NP-Hard problem is NP-Complete"],0,"NP-complete = NP-hard ∩ NP."],
+["D25",18,"pcp","The Modified PCP differs from the standard PCP because",["MPCP is decidable while PCP is not","MPCP requires an even number of tiles","The sequence must always start with the first domino/tile in PCP","The sequence must always start with the first domino/tile in MPCP"],3,"In MPCP the solution must begin with the first pair."],
+["D25",19,"np","Which of the following problems is NP Complete?",["Finding GCD of two numbers","Finding shortest path in a graph","SAT – Boolean Satisfiability","String Matching"],2,"SAT is the first NP-complete problem."],
+["D25",20,"np","Languages for which a solution can be verified in polynomial time by a deterministic TM are called",["P","NP","NP hard","NP Complete"],1,"That is the verifier definition of NP."],
+
+["M26",1,"dfa","A DFA cannot be represented in the following format",["Transition Graph","Transition Table","Transition Function","Undirected Graph"],3,"The transition graph of a DFA is a directed graph."],
+["M26",2,"dfa","Number of states required to simulate a computer with memory capable of storing ‘3’ words each of length ‘8’.",["2^(3*8)","3^(2*8)","2^(8+3)","3^(8*3)"],0,"24 bits of memory give 2²⁴ configurations."],
+["M26",3,"mm","A Moore machine is an application of",["Finite automata without input","Finite automata with input","Finite automata without output","Finite automata with output"],3,"Moore and Mealy machines are finite automata with output."],
+["M26",4,"dfa","The transition function of a DFA maps",["Σ × Σ → Q","Σ × Q → Σ","Q × Σ → Q","Q × Q → Σ"],2,"δ : Q × Σ → Q."],
+["M26",5,"norm","If the productions are of the form A → aα, where A ∈ V, a ∈ T, α ∈ V*, the grammar is known as",["Regular Grammar","Chomsky normal form","Linear grammar","Greibach Normal form"],3,"GNF: each production starts with a terminal followed by variables."],
+["M26",6,"re","The CFG S → aS | bS | a | b is equivalent to the regular expression",["a + b","(a + b)*","(a + b)(a + b)*","(a + b)(a + b)"],2,"It generates every non-empty string over {a, b}."],
+["M26",7,"cfg","Which of the following is not generated by the grammar S → SaSbS | ε ?",["aabb","aaabb","aababb","abab"],1,"Every use of the rule adds one a and one b, so the counts are always equal. aaabb has 3 a’s and 2 b’s."],
+["M26",8,"tree","The concatenation of the labels of the leaves of the derivation tree, without repetition, in the left-to-right ordering is known as",["Root","Yield","Child","Production"],1,"Yield of the tree."],
+["M26",9,"pdap","A DPDA is a PDA in which:",["No state p has two outgoing transitions","More than one state can have two or more outgoing transitions","At least one state has more than one transition","A state p has any number of incoming and outgoing transitions"],0,"In a DPDA there is never a choice between moves for the same state, input symbol and stack top."],
+["M26",10,"tree","Which of the following is not a type of transition in top-down parsing of a PDA?",["If the input string is completely read and the stack is full, go to the final state ‘F’","If the top symbol of the stack matches the input symbol being read, pop it","Push the start symbol ‘S’ into the stack","Pop the non-terminal on the left-hand side of the production at the top of the stack and push its right-hand side string"],0,"Acceptance happens when the input is read and the stack is empty (only the bottom marker), not full."],
+["M26",11,"pdaf","A PDA machine configuration (p, w, y) can be correctly represented as",["(current state, unprocessed input, stack content)","(unprocessed input, stack content, current state)","(current state, stack content, unprocessed input)","(current symbol, unprocessed input, stack input)"],0,"(state, remaining input, stack)."],
+["M26",12,"pdaf","The symbol Z₀ in the formal definition of PDA is used for",["Input symbol","stack symbol","buffer symbol","greek symbol"],1,"Z₀ is the initial stack symbol."],
+["M26",13,"tm","In the formal definition of a Turing machine, the transition function is defined on a state and ______ symbol.",["both input and tape","only input and not tape","only tape and not input","only blank symbol"],2,"δ(q, X) uses the tape symbol under the head."],
+["M26",14,"rec","If a language L is recursive then",["We can construct a TM that does not guarantee halting","We can construct a TM that never halts","We can’t construct a TM","We can construct a TM that always halts"],3,"Recursive = decided by a TM that always halts."],
+["M26",15,"tm","An instantaneous description of a TM consists of",["Present state and input to be processed","Present state only","Present input only","Previous state and input to be processed"],0,"The ID records the state, the tape contents and the head position."],
+["M26",16,"tm","Which of the following statements is true about Non-Deterministic Turing Machines?",["NTMs are less powerful than deterministic TMs","NTMs are equivalent in power to deterministic TMs","NTMs are more powerful than deterministic TMs","NTMs are not equal to deterministic TMs"],1,"An NTM can be simulated by a deterministic TM, so they accept the same languages."],
+["M26",17,"rec","If L and L̄ are recursively enumerable, then L is",["Regular","Context Sensitive","Context Free","Recursive"],3,"Run both machines in parallel; one of them must halt."],
+["M26",18,"rec","If there exists a language L for which there exists a Turing machine T that accepts every word in L and either rejects or loops for every word not in L, then L is",["Recursive","Recursively enumerable","NP-hard","NP-complete"],1,"That is the definition of a recursively enumerable language."],
+["M26",19,"np","Which of the following problems is in class P?",["Hamiltonian circuit problem","The Travelling Salesman problem","Finding shortest path in a graph","The graph colouring"],2,"Dijkstra and Bellman–Ford run in polynomial time."],
+["M26",20,"np","If P ≠ NP, which of the following statements holds true?",["NP-hard = NP","P = NP-complete","NP-complete ∩ P = Φ","NP-complete = NP"],2,"If P ≠ NP, no NP-complete problem is solvable in polynomial time."]
+];
+
+/* ---------- Part B / Part C pattern data: [unit, topic, part, [cell per paper]] ---------- */
+var BC={};
+BC.dm=[
+[1,"Warshall’s algorithm – transitive closure","B/C",["21a","26","27(ii)","26","26"]],
+[1,"Hasse diagram & poset (power set, D30, divisibility)","B/C",["26","21b","21a(ii)","21b(ii)",""]],
+[1,"Functions: one-one, onto, inverse, composition","B",["21b","","21b","21b(i)",""]],
+[1,"Relation matrices (∪, ∩, ∘, ⊕, inverse, complement, R²)","B",["","","","21a","21b"]],
+[1,"Set identity proofs (analytical)","B/C",["","21a","27(i)","",""]],
+[1,"Prove a relation is an equivalence relation","B",["","","","","21a"]],
+[2,"Euclidean algorithm – gcd & linear combination","B/C",["22b","22b","22a","27","22b"]],
+[2,"Inclusion–exclusion (counting problems)","B",["22a","22a","22b","22a","22a"]],
+[2,"Pigeonhole principle","B",["","","","22b(i)",""]],
+[2,"Permutations / arrangements (garland of roses)","B",["","","","22b(ii)",""]],
+[3,"Mathematical induction","B",["","23b","23b","23a(ii)","23b"]],
+[3,"Inconsistency of premises (Rama problem)","B",["","23a","23a","",""]],
+[3,"Indirect method of proof","B",["23a","","","","23a"]],
+[3,"Prove equivalence using laws / dual of an equivalence","B",["23b(ii)","","","23a(i)",""]],
+[3,"Truth table construction","B",["23b(i)","","","",""]],
+[3,"CP rule / symbolic form of an argument","B",["","","","23b",""]],
+[4,"Prove abelian group (a*b defined on a set)","B",["24a","24a","","24a","24a"]],
+[4,"Subgroup of a cyclic group is cyclic","B",["24b","","","",""]],
+[4,"Commutative ring with identity","B",["","","24a","",""]],
+[4,"Permutation group – product of permutations","B",["","24b","","",""]],
+[4,"Code words via parity-check matrix H","B/C",["27(b)","","24b","24b","24b"]],
+[4,"Generator matrix → parity-check matrix, decode","C",["","","26","","27"]],
+[4,"Hamming / minimum distance of codes","C",["27(a)","","","",""]],
+[5,"Kruskal’s algorithm – minimum spanning tree","B/C",["25b","27","25b","25b","25b"]],
+[5,"Bipartite graph: edges ≤ n²/4","B",["25a","","","25a(i)",""]],
+[5,"Graph isomorphism","B",["","25b","","25a(ii)",""]],
+[5,"Max edges: disconnected graph, n vertices, k components","B",["","","25a","","25a"]],
+[5,"Handshaking theorem (degrees, edges)","B",["","25a","","",""]]
+];
+BC.fla=[
+[1,"NFA / ε-NFA → DFA conversion","B",["21a","","21a(i), 21b(i)","","21b"]],
+[1,"Design DFA / NFA for a language (+ formal definition)","B",["21a","21a","","21a",""]],
+[1,"Moore / Mealy machines (design, conversion, output)","B",["21b","21b(1)","21a(ii), 21b(ii)","","21a"]],
+[1,"Regular expression: DFA → RE (Rijk), RE for palindrome","B/C",["26","21b(2)","27(ii)","",""]],
+[2,"Properties / closure of regular sets","B",["22a(ii)","","","22b(i)",""]],
+[2,"Prove a language is non-regular (pumping lemma)","B",["","","","21b",""]],
+[2,"Minimization of DFA (table filling)","B/C",["","26(2)","22a","",""]],
+[2,"Ambiguity of a grammar","B",["22a(i)","","22b(ii)","22b(ii)",""]],
+[2,"Simplification: remove null / unit / useless productions","B/C",["27","22a","","","22b"]],
+[2,"Chomsky Normal Form (CNF) conversion","B/C",["27","","27(i)","26(ii)","22a"]],
+[2,"Greibach Normal Form (GNF) conversion","B/C",["27","22b","22b(i)","26(ii)","26"]],
+[2,"Design a CFG for a language","B",["22b","23b","","22a",""]],
+[2,"Derivation / parse tree (leftmost derivation)","B/C",["27","","","26(i)",""]],
+[3,"Design a PDA for a language","B",["23a","23a","23a(i), 23b(i)","23a","23b"]],
+[3,"CFG → PDA conversion & string check","B",["23b","23b","23a(ii)","23b","23a"]],
+[3,"PDA → CFG conversion","B",["","","23b(ii)","",""]],
+[3,"DPDA vs NPDA","B",["","23a","","",""]],
+[3,"Pumping lemma for CFL (proof + application)","C",["","26(1)","","",""]],
+[4,"Construct a TM for a language (aⁿbⁿcⁿ, www, wwᴿ …)","B",["24a","24a(2)","24a(ii), 24b","24b","24b"]],
+[4,"TM computing a function (add, subtract, multiply, ww)","B/C",["24b","27","24a(i)","27","27"]],
+[4,"TM variants / extensions / Universal TM (short notes)","B",["","24b","","24a","24a"]],
+[4,"TM formal definition & instantaneous description","B",["","24a(1)","","",""]],
+[4,"Recursive & recursively enumerable languages","B",["","24b(3)","","25a","25a"]],
+[5,"P, NP, NP-complete, NP-hard","B",["25a","25a(2)","","",""]],
+[5,"Halting problem / Rice’s theorem / Lₑ not recursive","B",["25b","","25a, 25b","",""]],
+[5,"PCP / MPCP (instance or undecidability proof)","B/C",["","25a(1)","26","25b","25b"]],
+[5,"Decidable vs undecidable problems","B",["","25b","","25a",""]]
+];
+
+/* ---------- Setup ---------- */
+function imgSrc(n){return (window.IMGS&&window.IMGS[n])||"img/"+n}
+var $=function(s){return document.querySelector(s)};
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;")}
+var DB={};
+Object.keys(QS).forEach(function(k){
+  var qs=QS[k].map(function(a){return {id:k+"-"+a[0]+"-"+a[1],p:a[0],n:a[1],t:a[2],u:TOPICS[k][a[2]][1],q:a[3],o:a[4],a:a[5],e:a[6]||"",img:a[7]||""}});
+  var tf={};
+  qs.forEach(function(x){
+    var r=tf[x.t]||(tf[x.t]={id:x.t,name:TOPICS[k][x.t][0],u:x.u,n:0,ps:{},items:[]});
+    r.n++;r.ps[x.p]=1;r.items.push(x);
+  });
+  Object.keys(tf).forEach(function(t){tf[t].np=Object.keys(tf[t].ps).length});
+  DB[k]={qs:qs,tf:tf};
+});
+function plabel(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)return a[i][1];return p}
+function pshort(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)return a[i][2];return p}
+function tier(n){return n>=5?"Hot":n>=3?"Frequent":n===2?"Repeats":"Asked once"}
+
+var store={stats:{},subj:"dm",theme:""};
+function load(){try{var s=localStorage.getItem("pyq-omr-v1");if(s){var o=JSON.parse(s);if(o&&typeof o==="object"){store.stats=o.stats||{};store.subj=o.subj||"dm";store.theme=o.theme||""}}}catch(e){}}
+function save(){try{localStorage.setItem("pyq-omr-v1",JSON.stringify(store))}catch(e){}}
+function applyTheme(){var r=document.documentElement;if(store.theme)r.setAttribute("data-theme",store.theme);else r.removeAttribute("data-theme")}
+load();applyTheme();
+
+var S={tab:"practice",view:"setup",f:{papers:[],units:[],topic:"",mode:"practice",count:0,shuffle:false,diagram:false},sess:null};
+function resetFilters(){S.f={papers:[],units:[],topic:"",mode:S.f.mode||"practice",count:0,shuffle:false,diagram:false}}
+function subj(){return store.subj}
+
+function pool(){
+  var f=S.f;
+  return DB[subj()].qs.filter(function(q){
+    if(f.papers.length&&f.papers.indexOf(q.p)<0)return false;
+    if(f.units.length&&f.units.indexOf(q.u)<0)return false;
+    if(f.topic&&q.t!==f.topic)return false;
+    if(f.diagram&&!q.img)return false;
+    return true;
+  });
+}
+function mistakes(){
+  return DB[subj()].qs.filter(function(q){var s=store.stats[q.id];return s&&s.l===0});
+}
+function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(Math.random()*(i+1));var t=a[i];a[i]=a[j];a[j]=t}return a}
+
+/* ---------- Rendering ---------- */
+function renderChrome(){
+  var k=subj();
+  $("#subjseg").innerHTML=Object.keys(SUBJECTS).map(function(s){
+    return '<button data-act="subj" data-v="'+s+'" aria-pressed="'+(s===k)+'">'+esc(SUBJECTS[s].name)+'</button>';
+  }).join("");
+  var tabs=[["practice","Practice"],["hot","Hot topics"],["bc","Part B and C pattern"]];
+  $("#tabs").innerHTML=tabs.map(function(t){return '<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+t[1]+'</button>'}).join("");
+  $("#foot").innerHTML="Answers were worked out by Claude from scanned question papers. They are not an official key, so check anything that looks off against your notes or faculty. Left out because the scan is incomplete or the printed question is ambiguous: "+esc(SKIPPED[k]);
+  $("#themebtn").textContent=store.theme==="dark"?"Light theme":store.theme==="light"?"Dark theme":"Switch theme";
+}
+function render(){
+  renderChrome();
+  var m=$("#main");
+  if(S.tab==="practice"){
+    m.innerHTML=S.view==="setup"?setupHTML():S.view==="quiz"?quizHTML():resultHTML();
+  }else if(S.tab==="hot"){m.innerHTML=hotHTML()}
+  else{m.innerHTML=bcHTML()}
+}
+
+function setupHTML(){
+  var k=subj(),d=DB[k],f=S.f,ps=PAPERS[k];
+  var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
+  var hotCount=topics.filter(function(t){return t.n>=3}).length;
+  var n=pool().length,mi=mistakes().length;
+  var h='<section class="sheet"><h2>'+esc(SUBJECTS[k].name)+' <span class="hint">'+SUBJECTS[k].code+'</span></h2>';
+  h+='<p class="sub">Each question shows its paper, question number and unit, plus how many times that topic has come up across the five papers.</p>';
+  h+='<div class="stats"><div class="stat"><b>'+d.qs.length+'</b><span>Part A questions</span></div><div class="stat"><b>'+ps.length+'</b><span>papers</span></div><div class="stat"><b>'+topics.length+'</b><span>topics</span></div><div class="stat"><b>'+hotCount+'</b><span>topics asked 3 or more times</span></div></div>';
+  h+='<div class="field"><span class="lab">Papers <span class="hint">(none selected means all)</span></span><div class="chips">'+ps.map(function(p){return '<button class="chip" data-act="tp" data-v="'+p[0]+'" aria-pressed="'+(f.papers.indexOf(p[0])>=0)+'">'+p[1]+'</button>'}).join("")+'</div></div>';
+  h+='<div class="field"><span class="lab">Units</span><div class="chips">'+[1,2,3,4,5].map(function(u){return '<button class="chip" data-act="tu" data-v="'+u+'" aria-pressed="'+(f.units.indexOf(u)>=0)+'">Unit '+u+': '+esc(UNITS[k][u])+'</button>'}).join("")+'</div></div>';
+  h+='<div class="field"><label for="topicsel">Topic</label><select id="topicsel" data-f="topic"><option value="">All topics</option>'+topics.map(function(t){return '<option value="'+t.id+'"'+(f.topic===t.id?' selected':'')+'>'+esc(t.name)+' ('+t.n+'×)</option>'}).join("")+'</select></div>';
+  h+='<div class="field"><span class="lab">Mode</span><div class="row">';
+  h+='<label class="radio"><input type="radio" name="mode" data-f="mode" value="practice"'+(f.mode==="practice"?' checked':'')+'><span><b>Practice</b><small>See the answer and reason right after each question, and try again if you miss.</small></span></label>';
+  h+='<label class="radio"><input type="radio" name="mode" data-f="mode" value="exam"'+(f.mode==="exam"?' checked':'')+'><span><b>Exam</b><small>No feedback until you finish, then a score and review.</small></span></label>';
+  h+='</div></div>';
+  h+='<div class="field row"><div><label for="cnt" class="lab">How many</label><select id="cnt" data-f="count" style="max-width:200px"><option value="0">All matching</option>'+[10,20,30].map(function(c){return '<option value="'+c+'"'+(f.count===c?' selected':'')+'>'+c+' questions</option>'}).join("")+'</select></div>';
+  h+='<label style="display:flex;gap:8px;align-items:center;margin-top:30px"><input type="checkbox" data-f="shuffle"'+(f.shuffle?' checked':'')+' style="accent-color:var(--omr)"> Shuffle order</label><label style="display:flex;gap:8px;align-items:center;margin-top:30px"><input type="checkbox" data-f="diagram"'+(f.diagram?' checked':'')+' style="accent-color:var(--omr)"> Diagram questions only ('+d.qs.filter(function(x){return x.img}).length+')</label></div>';
+  h+='<div class="btns"><button class="btn omr" data-act="start"'+(n?'':' disabled')+'>Start '+(n?Math.min(n,f.count||n):0)+' questions</button>';
+  h+='<button class="btn alt" data-act="retryMistakes"'+(mi?'':' disabled')+'>Retry my mistakes ('+mi+')</button>';
+  h+='<button class="btn alt" data-act="resetProg">Clear saved progress</button></div>';
+  h+='<p class="hint" style="margin-top:10px">'+n+' questions match your filters. Your results are saved in this browser so “Retry my mistakes” works next time too.</p></section>';
+  return h;
+}
+
+function badges(q,k){
+  var tf=DB[k].tf[q.t];
+  return '<div class="qhead"><span class="tag paper">'+esc(plabel(k,q.p))+', Q'+q.n+'</span><span class="tag">Part A</span>'+(q.img?'<span class="tag">Has diagram</span>':'')+'<span class="tag">Unit '+q.u+': '+esc(UNITS[k][q.u])+'</span><span class="tag freq" title="'+esc(tf.name)+'">'+esc(tf.name)+': '+tier(tf.n)+', '+tf.n+'× in '+tf.np+' of 5 papers</span></div>';
+}
+function alsoHTML(q,k){
+  var tf=DB[k].tf[q.t];
+  var o=tf.items.filter(function(x){return x.id!==q.id});
+  if(!o.length)return '<div class="also">This topic appears only once in Part A of these papers.</div>';
+  return '<div class="also">Same topic also appeared in: '+o.map(function(x){return '<span class="tag">'+esc(pshort(k,x.p))+' Q'+x.n+'</span>'}).join("")+'</div>';
+}
+function quizHTML(){
+  var s=S.sess,k=subj(),q=s.list[s.i],a=s.ans[s.i],exam=s.mode==="exam";
+  var locked=!exam&&a.locked;
+  var h='<section class="sheet"><div class="qhead" style="justify-content:space-between"><b>Question '+(s.i+1)+' of '+s.list.length+'</b><button class="ghost" data-act="quit">Quit to setup</button></div>';
+  h+='<div class="bar"><i style="width:'+Math.round((s.i+(locked||(exam&&a.sel!==null)?1:0))/s.list.length*100)+'%"></i></div>';
+  h+=badges(q,k);
+  h+='<div class="qtext">'+esc(q.q)+'</div>'+(q.img?'<img class="qimg" src="'+imgSrc(q.img)+'" alt="Diagram for this question">':'')+'<div class="opts" role="group" aria-label="Options">';
+  q.o.forEach(function(op,i){
+    var c="opt";
+    if(locked){if(i===q.a)c+=" ok";else if(i===a.sel)c+=" bad"}
+    else if(a.sel===i)c+=" sel";
+    var mark=locked?(i===q.a?"correct":(i===a.sel?"your pick":"")):"";
+    h+='<button class="'+c+'" data-act="pick" data-v="'+i+'"'+(locked?' disabled':'')+'><span class="bub">'+"ABCD"[i]+'</span><span class="t">'+esc(op)+'</span><span class="mark">'+mark+'</span></button>';
+  });
+  h+='</div>';
+  if(locked){
+    var ok=a.sel===q.a;
+    h+='<div class="fb'+(ok?'':' no')+'"><b>'+(ok?'Correct. ':'Not quite. ')+'Answer: '+"ABCD"[q.a]+'</b>'+esc(q.e)+'</div>'+alsoHTML(q,k);
+  }
+  h+='<div class="btns">';
+  if(exam&&s.i>0)h+='<button class="btn alt" data-act="prev">Previous</button>';
+  if(locked&&a.sel!==q.a)h+='<button class="btn alt" data-act="again">Try again</button>';
+  var last=s.i===s.list.length-1;
+  h+='<button class="btn'+(locked?' omr':' alt')+'" data-act="'+(last?'finish':'next')+'">'+(last?'Finish':(locked||exam&&a.sel!==null?'Next':'Skip'))+'</button>';
+  h+='<span class="hint">Keys: A to D to answer, Enter for next.</span></div></section>';
+  return h;
+}
+function resultHTML(){
+  var s=S.sess,k=subj(),c=0,per={};
+  s.list.forEach(function(q,i){
+    var a=s.ans[i],pick=s.mode==="exam"?a.sel:a.first;
+    var ok=pick===q.a;if(ok)c++;
+    var t=per[q.t]||(per[q.t]={n:0,c:0});t.n++;if(ok)t.c++;
+  });
+  var pct=Math.round(c/s.list.length*100);
+  var h='<section class="sheet"><h2>Result</h2><div class="score"><div class="big">'+c+'<small>/'+s.list.length+'</small></div><div><b>'+pct+'%</b><div class="hint">'+(s.mode==="exam"?'Exam mode':'First attempts in practice mode')+'</div></div></div>';
+  var wrong=[];
+  s.list.forEach(function(q,i){var a=s.ans[i],pick=s.mode==="exam"?a.sel:a.first;if(pick!==q.a)wrong.push(q)});
+  h+='<div class="btns"><button class="btn omr" data-act="retryWrong"'+(wrong.length?'':' disabled')+'>Retry the '+wrong.length+' I missed</button><button class="btn alt" data-act="retryAll">Retry all</button><button class="btn alt" data-act="toSetup">Back to setup</button></div></section>';
+  var rows=Object.keys(per).map(function(t){return {t:t,n:per[t].n,c:per[t].c}}).sort(function(a,b){return (a.c/a.n)-(b.c/b.n)||b.n-a.n});
+  h+='<section class="sheet"><h3>By topic, weakest first</h3><div class="scroll"><table class="tb"><tr><th>Topic</th><th>Score</th><th>Times asked in all papers</th></tr>'+rows.map(function(r){var tf=DB[k].tf[r.t];return '<tr><td>'+esc(tf.name)+'</td><td>'+r.c+' / '+r.n+'</td><td>'+tf.n+'×</td></tr>'}).join("")+'</table></div></section>';
+  if(wrong.length){
+    h+='<section class="sheet"><h3>Review of missed questions</h3>';
+    wrong.forEach(function(q){
+      var i=s.list.indexOf(q),a=s.ans[i],pick=s.mode==="exam"?a.sel:a.first;
+      h+='<div class="rev"><div class="qhead"><span class="tag paper">'+esc(plabel(k,q.p))+', Q'+q.n+'</span><span class="tag">'+esc(DB[k].tf[q.t].name)+'</span></div><p style="white-space:pre-wrap"><b>'+esc(q.q)+'</b></p>'+(q.img?'<img class="qimg" src="'+imgSrc(q.img)+'" alt="Diagram for this question">':'')+'<p>Your answer: '+(pick===null||pick===undefined?'skipped':'<b>'+"ABCD"[pick]+'</b>. '+esc(q.o[pick]))+'</p><p>Correct: <b>'+"ABCD"[q.a]+'</b>. '+esc(q.o[q.a])+'</p><p class="hint">'+esc(q.e)+'</p></div>';
+    });
+    h+='</section>';
+  }
+  return h;
+}
+function hotHTML(){
+  var k=subj(),d=DB[k],ps=PAPERS[k];
+  var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
+  var top5=topics.slice(0,5).reduce(function(a,t){return a+t.n},0);
+  var h='<section class="sheet"><h2>Which topics keep coming back</h2><p class="sub">Counted over the Part A questions in the five papers. A filled bubble means the topic was asked in that paper. The top five topics make up '+Math.round(top5/d.qs.length*100)+'% of all Part A questions.</p>';
+  h+='<div class="hot hd"><span>Topic</span><span class="dots">'+ps.map(function(p){return '<span>'+p[2]+'</span>'}).join("")+'</span><span style="text-align:right">Asked</span><span></span></div>';
+  topics.forEach(function(t){
+    var done=0,right=0;
+    t.items.forEach(function(x){var s=store.stats[x.id];if(s){done++;if(s.l===1)right++}});
+    h+='<div class="hot"><div class="nm">'+esc(t.name)+'<small>Unit '+t.u+': '+esc(UNITS[k][t.u])+' · '+tier(t.n)+(done?' · your last tries: '+right+' of '+done+' right':'')+'</small></div>';
+    h+='<div class="dots">'+ps.map(function(p){var c=t.items.filter(function(x){return x.p===p[0]}).length;return '<span class="pd'+(c?' on':'')+'" title="'+p[1]+(c?': '+c+' question'+(c>1?'s':''):': not asked')+'"></span>'}).join("")+'</div>';
+    h+='<div class="cnt">'+t.n+'×<small>'+t.np+'/5 papers</small></div><button class="mini" data-act="practiceTopic" data-v="'+t.id+'">Practice</button></div>';
+  });
+  return h+'</section>';
+}
+function bcHTML(){
+  var k=subj(),ps=PAPERS[k],rows=BC[k];
+  function appear(c){return c?c.split(",").length:0}
+  var h='<section class="sheet"><h2>Part B and Part C: what repeats</h2><p class="sub">Question numbers show where each topic appeared (Q21 to Q25 are 8-mark Part B, Q26 and Q27 are 15-mark Part C). “Times” counts appearances, and a question that tests two topics is counted under each.</p><div class="scroll"><table class="bc"><tr><th>Topic</th><th>Part</th>'+ps.map(function(p){return '<th>'+p[2]+'</th>'}).join("")+'<th>Times</th><th>Papers</th></tr>';
+  var last=0,tot={};
+  rows.forEach(function(r){
+    if(r[0]!==last){last=r[0];h+='<tr class="u"><td colspan="'+(ps.length+4)+'">Unit '+r[0]+': '+esc(UNITS[k][r[0]])+'</td></tr>'}
+    var n=0,pp=0;
+    r[3].forEach(function(c){var a=appear(c);n+=a;if(a)pp++});
+    h+='<tr><td>'+esc(r[1])+'</td><td>'+r[2]+'</td>'+r[3].map(function(c){return c?'<td><span class="hit">'+esc(c)+'</span></td>':'<td class="no">–</td>'}).join("")+'<td><span class="heat h'+Math.min(n,5)+'">'+n+'×</span></td><td>'+pp+'/'+ps.length+'</td></tr>';
+  });
+  return h+'</table></div></section>';
+}
+
+/* ---------- Actions ---------- */
+function record(q,ok){
+  var s=store.stats[q.id]||{c:0,w:0,l:0};
+  if(ok)s.c++;else s.w++;
+  s.l=ok?1:0;store.stats[q.id]=s;save();
+}
+function begin(list,mode){
+  S.sess={list:list,i:0,mode:mode,ans:list.map(function(){return {sel:null,first:null,locked:false}})};
+  S.view="quiz";render();window.scrollTo(0,0);
+}
+function startFromFilters(){
+  var l=pool();if(!l.length)return;
+  if(S.f.shuffle)l=shuffle(l);
+  if(S.f.count&&S.f.count<l.length)l=(S.f.shuffle?l:shuffle(l)).slice(0,S.f.count);
+  begin(l,S.f.mode);
+}
+function pick(i){
+  var s=S.sess;if(!s||S.view!=="quiz")return;
+  var q=s.list[s.i],a=s.ans[s.i];
+  if(s.mode==="exam"){a.sel=i;render();return}
+  if(a.locked)return;
+  a.sel=i;a.locked=true;
+  if(a.first===null){a.first=i;record(q,i===q.a)}
+  render();
+}
+function goto(n){var s=S.sess;if(n<0||n>=s.list.length)return;s.i=n;render();window.scrollTo(0,0)}
+function finish(){
+  var s=S.sess;
+  if(s.mode==="exam")s.list.forEach(function(q,i){var a=s.ans[i];record(q,a.sel===q.a)});
+  S.view="result";render();window.scrollTo(0,0);
+}
+function wrongList(){
+  var s=S.sess;
+  return s.list.filter(function(q,i){var a=s.ans[i],p=s.mode==="exam"?a.sel:a.first;return p!==q.a});
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest("[data-act]");if(!b)return;
+  var act=b.getAttribute("data-act"),v=b.getAttribute("data-v");
+  switch(act){
+    case "subj":store.subj=v;save();resetFilters();S.view="setup";S.sess=null;render();break;
+    case "tab":S.tab=v;if(v==="practice"&&S.view!=="quiz"&&S.view!=="result")S.view="setup";render();break;
+    case "theme":store.theme=store.theme===""?"dark":store.theme==="dark"?"light":"";save();applyTheme();render();break;
+    case "tp":var pi=S.f.papers.indexOf(v);if(pi>=0)S.f.papers.splice(pi,1);else S.f.papers.push(v);render();break;
+    case "tu":var u=+v,ui=S.f.units.indexOf(u);if(ui>=0)S.f.units.splice(ui,1);else S.f.units.push(u);render();break;
+    case "start":startFromFilters();break;
+    case "retryMistakes":var m=mistakes();if(m.length)begin(shuffle(m),"practice");break;
+    case "resetProg":if(window.confirm("Clear all saved results for both subjects in this browser?")){store.stats={};save();render()}break;
+    case "pick":pick(+v);break;
+    case "next":goto(S.sess.i+1);break;
+    case "prev":goto(S.sess.i-1);break;
+    case "finish":finish();break;
+    case "again":var a=S.sess.ans[S.sess.i];a.sel=null;a.locked=false;render();break;
+    case "quit":S.view="setup";S.sess=null;render();break;
+    case "retryWrong":var w=wrongList();if(w.length)begin(shuffle(w),S.sess.mode);break;
+    case "retryAll":begin(shuffle(S.sess.list),S.sess.mode);break;
+    case "toSetup":S.view="setup";S.sess=null;render();break;
+    case "practiceTopic":S.tab="practice";S.view="setup";resetFilters();S.f.topic=v;startFromFilters();break;
+  }
+});
+document.addEventListener("change",function(e){
+  var t=e.target,f=t.getAttribute&&t.getAttribute("data-f");if(!f)return;
+  if(f==="topic")S.f.topic=t.value;
+  else if(f==="mode")S.f.mode=t.value;
+  else if(f==="count")S.f.count=+t.value;
+  else if(f==="shuffle")S.f.shuffle=t.checked;
+  else if(f==="diagram")S.f.diagram=t.checked;
+  render();
+});
+document.addEventListener("keydown",function(e){
+  if(S.tab!=="practice"||S.view!=="quiz"||e.target.tagName==="SELECT"||e.metaKey||e.ctrlKey)return;
+  var k=e.key.toLowerCase(),s=S.sess,idx="abcd".indexOf(k);
+  if(idx<0&&"1234".indexOf(k)>=0)idx="1234".indexOf(k);
+  if(k.length===1&&idx>=0){pick(idx);return}
+  if(k==="enter"||k==="arrowright"){
+    var a=s.ans[s.i];
+    if(e.target.tagName==="BUTTON"&&k==="enter"&&e.target.getAttribute("data-act")!=="next"&&e.target.getAttribute("data-act")!=="finish")return;
+    if(s.i===s.list.length-1){if(s.mode==="exam"||a.locked)finish()}else goto(s.i+1);
+    e.preventDefault();
+  }else if(k==="arrowleft"&&s.mode==="exam"){goto(s.i-1)}
+});
+render();
+</script>
+</body>
+</html>
