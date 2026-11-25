@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OMR Practice – Discrete Maths &amp; FLA past papers</title>
+<title>OMR Practice – FLA, Discrete Maths &amp; CN past papers</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#b4295e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -63,6 +63,15 @@ button{cursor:pointer}
 .seg{display:inline-flex;padding:4px;gap:4px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(8px)}
 .seg button{border:0;background:transparent;color:#fff;padding:9px 16px;border-radius:999px;font-weight:700;font-size:14px;white-space:nowrap}
 .seg button[aria-pressed="true"]{background:#fff;color:#2a1650;box-shadow:0 4px 14px -4px rgba(30,10,60,.45)}
+.seg button{display:inline-flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;line-height:1.15}
+.seg .sh{display:none}
+.seg em{font-style:normal;font-size:10.5px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,.18)}
+.seg button[aria-pressed="true"] em{background:var(--omr-soft);color:var(--omr)}
+.seg .st-done em{background:rgba(255,255,255,.12);opacity:.85}
+.seg .st-done[aria-pressed="true"] em{background:var(--ok-soft);color:var(--ok);opacity:1}
+.seg .st-done:not([aria-pressed="true"]) .nm{opacity:.75}
+@media (max-width:1180px){.seg .nm{display:none}.seg .sh{display:inline}}
+.inquiz .seg .nm{display:none}.inquiz .seg .sh{display:inline}.inquiz .seg em{display:none}
 .top .ghost{background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.32);color:#fff}
 .ghost{border:1px solid var(--line);background:var(--sheet);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600}
 .ghost:hover{border-color:var(--omr)}
@@ -162,7 +171,7 @@ select:hover{border-color:var(--omr)}
 .hot.hd{border-bottom:1px solid var(--line);border-radius:0;padding-bottom:8px;font-size:11.5px;color:var(--muted);font-weight:800;letter-spacing:.06em;text-transform:uppercase}
 .hot .nm{font-weight:700}
 .hot .nm small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;margin-top:2px}
-.dots{display:grid;grid-template-columns:repeat(5,52px);justify-items:center;gap:0}
+.dots{display:grid;grid-template-columns:repeat(var(--np,5),52px);justify-items:center;gap:0}
 .hot.hd .dots span{white-space:nowrap;font-size:11px;letter-spacing:.02em;text-transform:none}
 .pd{width:18px;height:18px;border-radius:50%;border:2px solid var(--line)}
 .pd.on{background:var(--fill);border-color:transparent;box-shadow:0 3px 8px -3px rgba(140,40,180,.7)}
@@ -343,7 +352,7 @@ a.kcell:hover{border-color:var(--ok)}
   .opt .t{font-size:16px}
   .btns .btn{flex:1 1 auto}
   .hot{grid-template-columns:minmax(0,1fr) 62px auto}
-  .hot .dots{grid-column:1 / -1;order:3;justify-items:start;grid-template-columns:repeat(5,minmax(0,1fr))}
+  .hot .dots{grid-column:1 / -1;order:3;justify-items:start;grid-template-columns:repeat(var(--np,5),minmax(0,1fr))}
   .hot.hd .dots{display:none}
   .qtext{font-size:18.5px}
   .big{font-size:56px}
@@ -375,12 +384,20 @@ a.kcell:hover{border-color:var(--ok)}
 "use strict";
 var PAPERS={
  dm:[["N24","Nov 2024","Nov ’24"],["M25","May 2025","May ’25"],["J25","Jul 2025","Jul ’25"],["N25","Nov 2025","Nov ’25"],["M26","May 2026","May ’26"]],
- fla:[["N24","Nov 2024","Nov ’24"],["M25","May 2025","May ’25"],["J25","Jul 2025","Jul ’25"],["D25","Dec 2025","Dec ’25"],["M26","May 2026","May ’26"]]
+ fla:[["N24","Nov 2024","Nov ’24"],["M25","May 2025","May ’25"],["J25","Jul 2025","Jul ’25"],["D25","Dec 2025","Dec ’25"],["M26","May 2026","May ’26"]],
+ cn:[["N24","Nov 2024","Nov ’24"],["J25","Jul 2025","Jul ’25"],["N25","Nov 2025","Nov ’25"],["M26","May 2026","May ’26"]]
 };
-var SUBJECTS={dm:{name:"Discrete Mathematics",code:"21MAB302T"},fla:{name:"Formal Language & Automata",code:"21CSC301T"}};
+/* Order = exam order. status: "now" (next exam), "done" (exam written), "next" (after that). */
+var SUBJECTS={
+ fla:{name:"Formal Language & Automata",short:"FLA",code:"21CSC301T",status:"now"},
+ dm:{name:"Discrete Mathematics",short:"DM",code:"21MAB302T",status:"done"},
+ cn:{name:"Computer Networks",short:"CN",code:"21CSC302J",status:"next"}
+};
+var STATUS={now:"Up now",done:"Exam done",next:"Next"};
 var UNITS={
  dm:{1:"Set theory",2:"Combinatorics & number theory",3:"Mathematical logic",4:"Algebraic structures & coding",5:"Graph theory"},
- fla:{1:"Finite automata & regular expressions",2:"Regular sets & context-free grammars",3:"Pushdown automata",4:"Turing machines",5:"Complexity & undecidability"}
+ fla:{1:"Finite automata & regular expressions",2:"Regular sets & context-free grammars",3:"Pushdown automata",4:"Turing machines",5:"Complexity & undecidability"},
+ cn:{1:"Network basics, OSI & physical layer",2:"IPv4 addressing, subnetting & devices",3:"Routing protocols & IPv6",4:"Data link layer: errors, ARQ & MAC",5:"Transport & application layer"}
 };
 var TOPICS={
  dm:{
@@ -402,11 +419,20 @@ var TOPICS={
   cflp:["Closure properties of CFLs",3],pdaf:["PDA: definition, notation & ID",3],pdap:["DPDA vs NPDA & languages accepted",3],
   tm:["Turing machine basics (tape, ID, halting, UTM)",4],rec:["Recursive & recursively enumerable languages",4],
   tc:["Time complexity & polynomial time",5],np:["P, NP, NP-complete & NP-hard",5],dec:["Decidable & undecidable problems",5],pcp:["PCP & MPCP",5]
+ },
+ cn:{
+  topo:["Network topologies & mesh links",1],nettype:["LAN, MAN, WAN & PAN",1],osi:["OSI layers & encapsulation",1],media:["Transmission media",1],
+  switch:["Circuit vs packet switching",1],perf:["Bandwidth, latency & throughput",1],mode:["Transmission modes (simplex, duplex)",1],
+  ipv4:["IPv4 addresses, classes & header",2],subnet:["Subnetting, masks & broadcast addresses",2],nat:["NAT",2],dev:["Network devices (hub, switch, bridge, router)",2],
+  dv:["Distance vector routing & RIP",3],ls:["Link state routing & OSPF",3],pv:["Path vector routing & BGP",3],ipv6:["IPv6",3],rt:["Default routing & EIGRP",3],
+  err:["Error detection: parity, Hamming & CRC",4],arq:["ARQ & sliding window",4],mac:["Ethernet, CSMA/CD & MAC",4],hdlc:["HDLC & framing",4],
+  tcpudp:["TCP, UDP & RTP",5],app:["DNS, HTTP, email & Telnet",5],port:["Port numbers",5]
  }
 };
 var SKIPPED={
  dm:"Discrete Maths: May 2025 Q11 (no option matches the inverse as printed).",
- fla:"FLA: Jul 2025 Q2 (the transition graph it refers to is missing from the scan), and Nov 2024 Q3, Q11, Q13 and May 2025 Q8, Q11, Q13, Q15 (the printed question has more than one defensible answer or is unclear)."
+ fla:"FLA: Jul 2025 Q2 (the transition graph it refers to is missing from the scan), and Nov 2024 Q3, Q11, Q13 and May 2025 Q8, Q11, Q13, Q15 (the printed question has more than one defensible answer or is unclear).",
+ cn:""
 };
 
 /* ---------- Question bank: [paper, Q no., topic, question, options, answer index, explanation] ---------- */
@@ -616,6 +642,92 @@ QS.fla=[
 ["M26",20,"np","If P ≠ NP, which of the following statements holds true?",["NP-hard = NP","P = NP-complete","NP-complete ∩ P = Φ","NP-complete = NP"],2,"If P ≠ NP, no NP-complete problem is solvable in polynomial time."]
 ];
 
+QS.cn=[
+["N24",1,"topo","Suppose 6 devices are connected with each other in a mesh topology network, then what is the total number of dedicated links required to connect them?",["15","14","9","8"],0,"A full mesh needs n(n − 1)/2 links: 6 × 5 / 2 = 15."],
+["N24",2,"mode","Communication between the traditional monitor and the computer involves ________ mode of transmission.",["Full-duplex","Half-duplex","Simplex","Automatic"],2,"Data only flows from the computer to the monitor, which is one-way (simplex)."],
+["N24",3,"dev","Match the following: 1. Router, 2. Hub, 3. Bridge, 4. Gateway with i) Data Link Layer, ii) Network Layer, iii) All Layers, iv) Physical Layer.",["1 – iv, 2 – iii, 3 – i, 4 – ii","1 – ii, 2 – iv, 3 – i, 4 – iii","1 – iii, 2 – iv, 3 – ii, 4 – i","1 – i, 2 – iii, 3 – ii, 4 – iv"],1,"Router = network layer, hub = physical layer, bridge = data link layer, gateway = all layers."],
+["N24",4,"osi","Layer 2 groups together the raw data (1’s and 0’s) into chunks, known as ________.",["Packets","Datagrams","Segments","Frames"],3,"The data link layer's unit is the frame."],
+["N24",5,"ipv4","Find the error, if any, in the following IPv4 addresses. i. 11.56.045.78  ii. 221.34.7.8.20  iii. 75.45.256.14  iv. 10.23.14.01",["Only options i, ii and iii are having errors","Only options ii, iii, and iv are having errors","All the 4 options are having errors","All the 4 options are correct"],2,"i and iv have leading zeros (045, 01), ii has five octets and iii has 256, which is above 255."],
+["N24",6,"subnet","A router receives a packet with the destination address 132.168.16.4/20. Find the broadcast address for the network.",["132.168.31.255","132.168.15.255","132.168.16.255","132.168.255.255"],0,"/20 leaves 4 host bits in the third octet, so blocks are 16 wide: 16 to 31. Broadcast = 132.168.31.255."],
+["N24",7,"ipv4","________ field in the IP header is used to specify how long a datagram can reside in a network before it reaches the destination.",["Identifications","Options","Type of Service (TOS)","Time To Live (TTL)"],3,"TTL is decremented at each hop and the datagram is dropped at 0."],
+["N24",8,"dev","________ is a 2 port device used for interconnecting two LANs working on the same protocol.",["Switch","Bridge","Router","Modem"],1,"A bridge is a two-port layer-2 device joining two LAN segments using the same protocol."],
+["N24",9,"dv","How does the Distance Vector Routing algorithm prevent routing loops?",["By sending periodic Hello messages","By implementing the Split-Horizon rule","By using the Link-State Advertisement.","By using the Spanning Tree Protocol."],1,"Split horizon stops a router advertising a route back on the interface it learned it from."],
+["N24",10,"ls","What algorithm is commonly used by Link State Routing protocols to compute the shortest path?",["Floyd-Warshall algorithm","Bellman-Ford algorithm","A* algorithm","Dijkstra's algorithm"],3,"Each router runs Dijkstra's SPF on its link-state database."],
+["N24",11,"pv","Which protocol is an example of a Path Vector Routing protocol?",["BGP","RIP v1","OSPF","RIP v2"],0,"BGP is path vector; RIP is distance vector and OSPF is link state."],
+["N24",12,"pv","Which of the following attributes is used by BGP to determine the best path when multiple paths are available?",["Bandwidth","Hop count","AS_Path","Delay"],2,"BGP compares path attributes such as AS_Path, preferring the shorter AS path."],
+["N24",13,"mac","In CSMA/CD, what does a device do when it detects a collision on the network?",["It stops transmitting and sends a jamming signal.","It immediately retransmits the data.","It continues transmitting but at a lower power level.","It waits for a fixed time and then retransmits"],0,"It aborts, sends a jam signal, then waits a random backoff time."],
+["N24",14,"mac","What is the primary function of the Ethernet frame's MAC (Media Access Control) address?",["To segment the frame data into smaller packets.","To encrypt the frame data for secure transmission.","To identify the source and destination of the frame within a local network.","To route the frame to the correct IP address."],2,"MAC addresses identify hosts on the local link."],
+["N24",15,"err","What is the Hamming distance between the binary strings 101010 and 100100?",["2","3","4","5"],1,"101010 XOR 100100 = 001110, which has three 1s."],
+["N24",16,"arq","What is the primary difference between Stop-and-Wait ARQ and Sliding Window ARQ?",["Stop-and-Wait ARQ allows multiple packets to be sent before requiring an acknowledgment, while Sliding Window ARQ only sends one packet at a time.","Stop-and-Wait ARQ uses a sliding window mechanism, while Sliding Window ARQ uses a stop-and-wait mechanism","Sliding Window ARQ is used in analog communication, while Stop-and-Wait ARQ is used in digital communication.","Sliding Window ARQ allows multiple packets to be sent before requiring an acknowledgment, while Stop-and-Wait ARQ only sends one packet at a time."],3,"Stop-and-Wait has a window of 1; sliding window keeps several frames outstanding."],
+["N24",17,"tcpudp","Which of the following protocols is commonly used with UDP for real-time applications?",["Hyper Text Transfer Protocol (HTTP)","File Transfer Protocol (FTP)","Real-time Transport Protocol (RTP)","Simple Mail Transfer Protocol (SMTP)"],2,"RTP runs over UDP for audio and video. HTTP, FTP and SMTP use TCP."],
+["N24",18,"tcpudp","What mechanism does TCP use to ensure reliable data transmission?",["Time-to-live (TTL)","Retransmission of lost packets","Packet filtering","Data encryption"],1,"TCP uses acknowledgements and retransmits unacknowledged segments."],
+["N24",19,"app","Which HTTP status code indicates that a request was successful and the server returned the requested resource?",["200 OK","404 Not Found","500 Internal Server Error","301 Moved Permanently"],0,"2xx means success; 200 OK returns the resource."],
+["N24",20,"app","Which protocol is used by Telnet for communication?",["ICMP","UDP","IP","TCP"],3,"Telnet runs over TCP port 23."],
+
+["J25",1,"perf","________ defines how long it takes for an entire message to completely arrive at destination",["Packet Loss","Latency","Throughput","Bandwidth"],1,"Latency (delay) is the time for a whole message to arrive, from the first bit sent."],
+["J25",2,"topo","Which of the following network topologies is best suited for a scenario requiring minimal data collisions, high reliability, and the ability to easily add or remove nodes without affecting the overall network performance, and also ensures that each node is connected directly to a central device for managing and routing traffic?",["Bus Topology","Mesh Topology","Star Topology","Ring Topology"],2,"Every node connects to a central hub or switch, which is the star topology."],
+["J25",3,"switch","Which one of the following technique is used by a typical circuit switching protocol?",["Datagram Packets","Virtual circuit","Frequency division multiplexing","Time division multiplexing"],3,"Circuit-switched networks such as the telephone system reserve TDM time slots (FDM is also used, but TDM is the standard answer)."],
+["J25",4,"osi","In the layer hierarchy, as the data packet moves from the upper to the lower layers, headers are ________",["Added","Removed","Rearranged","Modified"],0,"Each layer encapsulates the data by adding its header on the way down."],
+["J25",5,"subnet","You have an IP address of 172.16.13.5 with a 255.255.255.128 subnet mask. What is your class of address, network address and broadcast address?",["Class A, 172.16.13.0, 172.16.13.127","Class B, 172.16.13.0, 172.16.13.127","Class B, 172.16.13.0, 172.16.13.255","Class B, 172.16.0.0, 172.16.255.255"],1,"172 is class B. A /25 mask splits the last octet into 0–127 and 128–255, and .5 falls in 0–127."],
+["J25",6,"ipv4","How many possible addresses per network are there in a class C of an IPv4 address?",["65536","128","256","512"],2,"Class C has 8 host bits, so 2⁸ = 256 addresses (254 usable)."],
+["J25",7,"subnet","What is the broadcast address for the network 10.10.10.0 with a subnet mask of 255.255.255.128?",["10.10.10.127","10.10.10.128","10.10.10.254","10.10.10.255"],0,"/25 gives the range 10.10.10.0–127, so the broadcast is .127."],
+["J25",8,"ipv4","How many possible unique addresses are there in IPv4?",["Approximately 4 million","Approximately 16 million","Approximately 8 billion","Approximately 4 billion"],3,"2³² ≈ 4.29 billion."],
+["J25",9,"pv","Which one of the following is an example of Exterior Gateway Protocol(EGP)",["OSPF","IS-IS","BGP","RIPv1"],2,"BGP routes between autonomous systems. The rest are interior gateway protocols."],
+["J25",10,"ipv6","Address length of IPV6",["16 bit","32 bit","64 bit","128 bit"],3,"IPv6 addresses are 128 bits."],
+["J25",11,"rt","What is the purpose of a default routing in a router?",["It directs traffic to all networks in the routing table.","It is used when no other route is found in the routing table","It specifies the best route to use for network communication.","It updates the routing table automatically."],1,"The default route (0.0.0.0/0) is the route of last resort."],
+["J25",12,"ls","In a link-state routing protocol, what is the first step a router takes after it detects a change in the network topology?",["It updates its routing table.","It waits for other routers to send updates.","It recalculates the best path using the Bellman-Ford algorithm","It floods a link-state advertisement (LSA) to all other routers."],3,"It floods an LSA first, then every router reruns Dijkstra."],
+["J25",13,"err","What is the primary limitation of Hamming code?",["It cannot correct errors","It requires too much bandwidth","It cannot detect double-bit errors","It can only correct single-bit errors"],3,"Standard Hamming code corrects only single-bit errors."],
+["J25",14,"err","Find the parity bit for the following data units 1001011, 0001100, 1000000, 1110111. Assume odd parity.",["1 0 1 1","0 1 0 0","0 0 1 0","1 1 0 1"],3,"The 1-counts are 4, 2, 1 and 6. Odd parity adds 1 when the count is even: 1, 1, 0, 1."],
+["J25",15,"arq","How many frames are in transit at a time in Stop and Wait ARQ?",["One frame","Two frames","Three frames","Four frames"],0,"The sender waits for an ACK after every frame."],
+["J25",16,"arq","For a sliding window of size (n-1) where n is the sequence number of the frames, there can be a maximum of how many frames sent but yet to be acknowledged?",["0","1","n","n-1"],3,"The window size is the number of outstanding unacknowledged frames: n − 1."],
+["J25",17,"app","What is the primary role of an authoritative DNS server?",["To resolve recursive queries","To store DNS records for a specific domain","To forward queries to other DNS servers","To cache DNS responses"],1,"An authoritative server holds the actual records for its zone."],
+["J25",18,"app","HTTP GET method is used to --------------",["submit data to the server","request data from the server","delete data from the server","update existing data on the server"],1,"GET retrieves a resource. POST submits, DELETE deletes and PUT updates."],
+["J25",19,"tcpudp","Which of the following protocol provides reliable communication?",["UDP","WWW","TELNET","TCP"],3,"TCP is connection-oriented and reliable."],
+["J25",20,"port","Select the well-known port among the following",["65535","1020","8080","10000"],1,"Well-known ports are 0–1023."],
+
+["N25",1,"topo","Which of the following topologies provides dedicated links between every pair of devices, offering high robustness but requiring a lot of cabling?",["Star Topology","Bus Topology","Mesh Topology","Ring Topology"],2,"A full mesh has a dedicated link between every pair of devices."],
+["N25",2,"nettype","Which of the following is an example of a Metropolitan Area Network (MAN)?",["Bluetooth Connection","Ethernet LAN","Satellite Internet","Cable TV Network"],3,"A city-wide cable TV network is the classic MAN. Bluetooth is a PAN and satellite is a WAN."],
+["N25",3,"osi","In the OSI model, which layer is responsible for process-to-process delivery of messages?",["Network Layer","Data Link Layer","Transport Layer","Session Layer"],2,"The transport layer delivers messages between processes using port numbers."],
+["N25",4,"media","Which transmission medium uses light signals and provides the highest bandwidth?",["Coaxial Cable","Fiber Optic Cable","Radio Waves","Twisted Pair"],1,"Optical fibre carries light and has the highest bandwidth."],
+["N25",5,"subnet","Which of the following addresses is a broadcast address in a network 192.168.1.0/24?",["192.168.1.255","192.168.1.0","192.168.1.1","192.168.0.255"],0,"All host bits set to 1 gives 192.168.1.255."],
+["N25",6,"subnet","What is the purpose of subnetting in IPv4?",["To increase the size of hosts per network","To increase the number of networks","To assign public IPs","To replace MAC addresses"],1,"Subnetting borrows host bits to create more, smaller networks."],
+["N25",7,"subnet","How many usable hosts are there in a /26 network?",["64","32","126","62"],3,"There are 32 − 26 = 6 host bits, so 2⁶ − 2 = 62."],
+["N25",8,"dev","Which device operates only at the physical layer of the OSI model?",["Hub","Switch","Router","Modem"],0,"A hub just repeats bits (layer 1). A switch is layer 2 and a router is layer 3."],
+["N25",9,"dv","Distance Vector Routing uses which algorithm?",["Dijkstra’s Algorithm","Bellman-Ford Algorithm","A* Algorithm","Floyd-Warshall Algorithm"],1,"Distance vector routing is distributed Bellman-Ford."],
+["N25",10,"pv","Which protocol uses Path Vector Routing?",["RIP","OSPF","BGP","EIGRP"],2,"BGP is the path vector protocol."],
+["N25",11,"dv","RIP v2 supports",["Only hop count of 15","Autonomous System(AS) Path","Multicast address 224.0.0.1","Subnet information"],3,"RIPv2 is classless and carries the subnet mask. It multicasts to 224.0.0.9, not 224.0.0.1."],
+["N25",12,"ipv6","Which of the following is TRUE about IPv6?",["IPv6 uses 32-bit addresses","NAT is required in IPv6","IPv6 supports unicast, multicast, and anycast","IPv6 cannot coexist with IPv4"],2,"IPv6 has unicast, multicast and anycast (no broadcast). It is 128-bit, needs no NAT and can coexist with IPv4 through dual stack or tunnelling."],
+["N25",13,"mac","CSMA works on which basic principle?",["Transmit before sense","Sense before transmit","Random retransmission only","Collision detection after transmission"],1,"Carrier Sense Multiple Access means listen before talking."],
+["N25",14,"hdlc","HDLC is a",["Bit-oriented protocol","Connectionless protocol","Character-oriented protocol","Wireless protocol"],0,"HDLC is bit-oriented and uses bit stuffing around the 01111110 flag."],
+["N25",15,"mac","The minimum frame size in standard Ethernet is",["368 bits","1024 bits","512 bits","256 bits"],2,"The minimum frame is 64 bytes = 512 bits."],
+["N25",16,"err","Cyclic Redundancy Check(CRC) is based on",["Decimal subtraction","Logical OR operation","Modulo-2 binary division","Simple parity addition"],2,"CRC divides by the generator polynomial using modulo-2 (XOR) division."],
+["N25",17,"tcpudp","Which of the following is a connectionless transport layer protocol?",["TCP","UDP","FTP","HTTP"],1,"UDP is connectionless."],
+["N25",18,"app","Which of the following resolves hostnames to IP addresses?",["HTTP","SMTP","FTP","DNS"],3,"DNS maps names to IP addresses."],
+["N25",19,"app","Telnet is used for",["File transfer","Email communication","Remote login","Web browsing"],2,"Telnet gives a remote terminal login."],
+["N25",20,"port","Port number 25 is reserved for",["FTP","HTTP","DNS","SMTP"],3,"SMTP uses port 25. FTP uses 20/21, HTTP 80 and DNS 53."],
+
+["M26",1,"nettype","Which of the following network types is typically used to connect devices within a home?",["WAN","LAN","MAN","PAN"],1,"A home network is a LAN. A PAN covers one person's devices, such as Bluetooth."],
+["M26",2,"osi","Which layer in OSI model is responsible for error detection and framing?",["Transport Layer","Data Link Layer","Network Layer","Session Layer"],1,"Framing and error detection are data link layer jobs."],
+["M26",3,"topo","Calculate the total number of links required to connect 12 devices in a fully connected mesh network.",["144","66","72","112"],1,"n(n − 1)/2 = 12 × 11 / 2 = 66."],
+["M26",4,"media","Which of the following guided media provides the highest data rate and is immune to electromagnetic interference?",["Twisted Pair","Coaxial Cable","Microwave Link","Fiber Optic Cable"],3,"Fibre carries light, so EMI does not affect it, and it has the highest data rate."],
+["M26",5,"subnet","You are given IP 192.168.1.0/24. You need 4 equal subnets. Which subnet mask will you use?",["255.255.255.192","255.255.255.128","255.255.255.224","255.255.255.240"],0,"4 subnets need 2 borrowed bits, giving /26 = 255.255.255.192."],
+["M26",6,"ipv4","Detect the error, if any, in the following IPv4 addresses: i. 11.56.045.78  ii. 221.34.7.8.20  iii. 75.45.256.14  iv. 10.23.14.01",["Only options i, ii, and iii are having errors","Only options ii, iii, and iv are having errors","All the 4 options are having errors","All the 4 options are correct"],2,"Same as Nov 2024 Q5: leading zeros in i and iv, five octets in ii, and 256 in iii."],
+["M26",7,"nat","if a router translates one private IP to one public IP without changing port numbers, which type of NAT is being used?",["Dynamic NAT","Static NAT","PAT (Port Address Translation)","NAT Overload"],1,"A fixed one-to-one mapping without ports is static NAT. Dynamic NAT is also one-to-one but draws from a pool. PAT (NAT overload) changes ports."],
+["M26",8,"dev","Which of the following statements about networking devices is TRUE?",["A switch forwards frames based only on IP addresses, while a router forwards frames based on MAC addresses.","A hub performs collision detection and retransmits frames if a collision occurs.","A router can connect multiple networks with different IP subnets and perform packet forwarding based on the routing table.","A bridge operates at the network layer and uses IP routing to forward packets."],2,"Routers join different IP networks using a routing table. The other statements swap the layers."],
+["M26",9,"pv","Which of the following is the main characteristic of a Path Vector Routing protocol (like BGP)?",["Shares entire link-state database with all routers","Exchanges only the best path and the list of ASes traversed","Uses hop count as the only metric for route selection","Periodically floods routing updates to all neighbors"],1,"Path vector advertises the best path along with its AS_PATH list."],
+["M26",10,"rt","EIGRP uses a composite metric to select the best path. Which parameters are used by default in its metric calculation?",["Bandwidth and Delay","Bandwidth, Delay, Load, Reliability","Hop Count and Delay","Only Hop Count"],0,"By default K1 = K3 = 1, so only bandwidth and delay count. Load and reliability are off."],
+["M26",11,"dv","In RIP, the maximum hop count allowed before a destination is considered unreachable is:",["10","15","16","32"],1,"15 hops is the maximum allowed. 16 means infinity (unreachable)."],
+["M26",12,"ipv6","Which of the following is a valid compressed IPv6 address?",["2001:db8::1","2001:0db8:0000:0000:0000:0000:0000:1","2001:db8:0:0:0:0:0:1","Both A and C"],3,"A uses :: zero compression and C drops leading zeros, so both are valid shortened forms. B is the full form."],
+["M26",13,"mac","In Ethernet using CSMA/CD, what does a station do when a collision is detected?",["Immediately retransmit the frame","Abort transmission and wait random backoff time","Stop transmitting permanently","Send a jamming signal and shut down"],1,"It aborts (after a jam signal) and retries after a random exponential backoff."],
+["M26",14,"arq","Which of the following statements about Sliding Window ARQ is TRUE?",["Receiver can only accept one frame at a time","Sender can transmit multiple frames before waiting for ACK","It cannot recover from lost frames","It is less efficient than Stop-and-Wait"],1,"Several frames can be outstanding up to the window size."],
+["M26",15,"hdlc","In HDLC, what is the purpose of the flag field (01111110) in each frame?",["It specifies the type of control frame.","It marks the beginning and end of a frame.","It performs error detection.","It indicates the next expected frame number."],1,"The flag delimits the frame at both ends."],
+["M26",16,"err","If a dataword 1011 is transmitted with even parity and the receiver gets 1001, what will happen?",["Receiver accepts the frame (no error detected)","Receiver detects an error due to wrong parity bit","Receiver requests retransmission using CRC","Receiver corrects the error using Hamming code"],1,"One bit flipped, so the parity check fails and the error is detected. Simple parity cannot correct it."],
+["M26",17,"tcpudp","which of the following protocols is commonly used with UDP for real-time applications:",["Hyper Text Transfer Protocol (HTTP)","File Transfer Protocol (FTP)","Simple Mail Transfer Protocol (SMTP)","Real-time Transport Protocol (RTP)"],3,"RTP runs over UDP."],
+["M26",18,"app","If an email is sent using SMTP, which protocol is likely used by the recipient to retrieve the email from the server?",["HTTP","FTP","POP3 or IMAP","Telnet"],2,"SMTP pushes mail to the server, and POP3 or IMAP pulls it to the client."],
+["M26",19,"app","Identify the HTTP status code that shows a request was successful and the server returned the requested resource.",["200 OK","404 Not Found","500 Internal Server Error","301 Moved Permanently"],0,"200 OK means success."],
+["M26",20,"app","Choose the protocol that Telnet uses for communication.",["ICMP","UDP","TCP","IP"],2,"Telnet runs over TCP port 23."]
+];
+
 /* ---------- Part B / Part C pattern data: [unit, topic, part, [cell per paper]] ---------- */
 var BC={};
 BC.dm=[
@@ -658,7 +770,9 @@ var BCFIG={dm:[
 ["N25","25a(ii)","Determine whether the graphs G and H are isomorphic. (4 Marks)","dm_n25_q25a.png"],
 ["N25","25b","Use Kruskal's algorithm to find a minimum spanning tree for the weighted graph.","dm_n25_q25b.png"],
 ["M26","25b","Find the minimum spanning tree of the weighted graph using Kruskals algorithm.","dm_m26_q25b.png"]
-],fla:[]};
+],fla:[],cn:[
+["M26","27","Consider the network topology shown below. Using Dijkstra’s Link State Algorithm, compute the shortest path tree from router F to all other routers in the network.\n• Show the step-by-step table of tentative distances at each iteration.\n• Identify the final shortest paths and their total costs.\n• Briefly explain how the algorithm updates the distance and predecessor nodes during each step.","cn_m26_q27.png"]
+]};
 BC.fla=[
 [1,"NFA / ε-NFA → DFA conversion","B",["21a","","21a(i), 21b(i)","","21b"]],
 [1,"Design DFA / NFA for a language (+ formal definition)","B",["21a","21a","","21a",""]],
@@ -689,6 +803,38 @@ BC.fla=[
 [5,"Decidable vs undecidable problems","B",["","25b","","25a",""]]
 ];
 
+BC.cn=[
+[1,"Circuit switching vs packet switching","B",["21a","","","21a"]],
+[1,"Network topologies (with sketch)","B",["","21a","",""]],
+[1,"Transmission media: twisted pair, coaxial, fibre","B",["","21b","","21b"]],
+[1,"LAN, MAN, WAN & PAN","B",["","","21a",""]],
+[1,"Bandwidth, latency & components of delay","B",["","","21b",""]],
+[1,"OSI model layers (and comparison with TCP/IP)","C",["","26","26",""]],
+[2,"Network devices and their uses","B",["21b","22b","",""]],
+[2,"First and last address of a block (CIDR)","B",["22a","","22a",""]],
+[2,"NAT (pool, port addresses, types)","B",["22b","22a","",""]],
+[2,"Classful vs classless addressing / CIDR","B",["","","22b","22b"]],
+[2,"Binary to dotted-decimal and address class","B",["","","","22a"]],
+[2,"Subnetting / VLSM design","C",["26","","","26"]],
+[3,"OSPF link-state advertisement types","B",["23a","","",""]],
+[3,"Distance vector routing loops and prevention","B",["23b","","",""]],
+[3,"Distance vector routing with Bellman-Ford","B/C",["27","","","23a"]],
+[3,"Dijkstra’s algorithm in link state routing","B/C",["","","23a","27"]],
+[3,"Link state vs distance vector routing","B",["","23a","",""]],
+[3,"RIP (v1 and v2) vs OSPF","C",["","","27",""]],
+[3,"IPv6: features, packet format, vs IPv4, transition","B",["","23b","23b","23b"]],
+[4,"CSMA/CD (and CSMA/CA)","B",["24a","","","24a"]],
+[4,"ARQ: Go-Back-N, Selective Repeat, types","B",["24b","24b","",""]],
+[4,"Sliding window flow control","B",["","","24a",""]],
+[4,"Parity / vertical redundancy check","B",["","24a","",""]],
+[4,"CRC (working, or compute and check bits)","B",["","","24b","24b"]],
+[5,"TCP vs UDP","B",["25a","25a","25a",""]],
+[5,"TCP segment format and handshake","B",["","","","25a"]],
+[5,"DNS records and role of DNS","B",["25b","25b","",""]],
+[5,"Email protocols and mail architecture","B",["","","25b","25b"]],
+[5,"Protocol for real-time video (UDP / RTP)","C",["","27","",""]]
+];
+
 /* ---------- Setup ---------- */
 function imgSrc(n){return (window.IMGS&&window.IMGS[n])||"img/"+n}
 var $=function(s){return document.querySelector(s)};
@@ -708,8 +854,8 @@ function plabel(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)r
 function pshort(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)return a[i][2];return p}
 function tier(n){return n>=5?"Hot":n>=3?"Frequent":n===2?"Repeats":"Asked once"}
 
-var store={stats:{},subj:"dm",theme:""};
-function load(){try{var s=localStorage.getItem("pyq-omr-v1");if(s){var o=JSON.parse(s);if(o&&typeof o==="object"){store.stats=o.stats||{};store.subj=o.subj||"dm";store.theme=o.theme||""}}}catch(e){}}
+var store={stats:{},subj:"fla",theme:"",v:2};
+function load(){try{var s=localStorage.getItem("pyq-omr-v1");if(s){var o=JSON.parse(s);if(o&&typeof o==="object"){store.stats=o.stats||{};store.subj=o.subj||"fla";store.theme=o.theme||"";if((o.v||1)<2&&store.subj==="dm")store.subj="fla";if(!SUBJECTS[store.subj])store.subj="fla"}}}catch(e){}}
 function save(){try{localStorage.setItem("pyq-omr-v1",JSON.stringify(store))}catch(e){}}
 function applyTheme(){var r=document.documentElement;if(store.theme)r.setAttribute("data-theme",store.theme);else r.removeAttribute("data-theme")}
 load();applyTheme();
@@ -738,11 +884,11 @@ function shuffle(a){a=a.slice();for(var i=a.length-1;i>0;i--){var j=Math.floor(M
 function renderChrome(){
   var k=subj();
   $("#subjseg").innerHTML=Object.keys(SUBJECTS).map(function(s){
-    return '<button data-act="subj" data-v="'+s+'" aria-pressed="'+(s===k)+'">'+esc(SUBJECTS[s].name)+'</button>';
+    var st=SUBJECTS[s].status;return '<button class="st-'+st+'" data-act="subj" data-v="'+s+'" aria-pressed="'+(s===k)+'" title="'+esc(SUBJECTS[s].name)+' · '+STATUS[st]+'"><span class="nm">'+esc(SUBJECTS[s].name)+'</span><span class="sh">'+esc(SUBJECTS[s].short)+'</span><em>'+(st==="done"?'✓ ':'')+STATUS[st]+'</em></button>';
   }).join("");
   var tabs=[["practice","Practice"],["key","Answer key"],["hot","Hot topics"],["bc","Part B and C pattern"]];
   $("#tabs").innerHTML=tabs.map(function(t){return '<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+t[1]+'</button>'}).join("");
-  $("#foot").innerHTML="Answers were worked out by Claude from scanned question papers. They are not an official key, so check anything that looks off against your notes or faculty. Left out because the scan is incomplete or the printed question is ambiguous: "+esc(SKIPPED[k]);
+  $("#foot").innerHTML="Answers were worked out by Claude from scanned question papers. They are not an official key, so check anything that looks off against your notes or faculty. "+(SKIPPED[k]?"Left out because the scan is incomplete or the printed question is ambiguous: "+esc(SKIPPED[k]):"Every Part A question from these papers is included.");
   $("#themebtn").textContent=store.theme==="dark"?"Light theme":store.theme==="light"?"Dark theme":"Switch theme";
 }
 function render(){
@@ -763,8 +909,9 @@ function setupHTML(){
   var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
   var hotCount=topics.filter(function(t){return t.n>=3}).length;
   var n=pool().length,mi=mistakes().length;
+  var nimg=d.qs.filter(function(x){return x.img}).length;
   var h='<div class="layout setup"><section class="sheet"><h2>'+esc(SUBJECTS[k].name)+' <span class="hint">'+SUBJECTS[k].code+'</span></h2>';
-  h+='<p class="sub">Each question shows its paper, question number and unit, plus how many times that topic has come up across the five papers.</p>';
+  h+='<p class="sub">Each question shows its paper, question number and unit, plus how many times that topic has come up across the '+ps.length+' papers.</p>';
   h+='<div class="stats"><div class="stat"><b>'+d.qs.length+'</b><span>Part A questions</span></div><div class="stat"><b>'+ps.length+'</b><span>papers</span></div><div class="stat"><b>'+topics.length+'</b><span>topics</span></div><div class="stat"><b>'+hotCount+'</b><span>topics asked 3 or more times</span></div></div>';
   h+='<div class="field"><span class="lab">Papers <span class="hint">(none selected means all)</span></span><div class="chips">'+ps.map(function(p){return '<button class="chip" data-act="tp" data-v="'+p[0]+'" aria-pressed="'+(f.papers.indexOf(p[0])>=0)+'">'+p[1]+'</button>'}).join("")+'</div></div>';
   h+='<div class="field"><span class="lab">Units</span><div class="chips">'+[1,2,3,4,5].map(function(u){return '<button class="chip" data-act="tu" data-v="'+u+'" aria-pressed="'+(f.units.indexOf(u)>=0)+'">Unit '+u+': '+esc(UNITS[k][u])+'</button>'}).join("")+'</div></div>';
@@ -775,7 +922,7 @@ function setupHTML(){
   h+='<label class="radio"><input type="radio" name="mode" data-f="mode" value="exam"'+(f.mode==="exam"?' checked':'')+'><span><b>Exam</b><small>No feedback until you finish, then a score and review.</small></span></label>';
   h+='</div></div>';
   h+='<div class="field row"><div><label for="cnt" class="lab">How many</label><select id="cnt" data-f="count" style="max-width:200px"><option value="0">All matching</option>'+[10,20,30].map(function(c){return '<option value="'+c+'"'+(f.count===c?' selected':'')+'>'+c+' questions</option>'}).join("")+'</select></div>';
-  h+='<label class="chk"><input type="checkbox" data-f="shuffle"'+(f.shuffle?' checked':'')+'> Shuffle order</label><label class="chk"><input type="checkbox" data-f="diagram"'+(f.diagram?' checked':'')+'> Diagram questions only ('+d.qs.filter(function(x){return x.img}).length+')</label></div>';
+  h+='<label class="chk"><input type="checkbox" data-f="shuffle"'+(f.shuffle?' checked':'')+'> Shuffle order</label>'+(nimg?'<label class="chk"><input type="checkbox" data-f="diagram"'+(f.diagram?' checked':'')+'> Diagram questions only ('+nimg+')</label>':'')+'</div>';
   h+='<div class="btns"><button class="btn omr" data-act="start"'+(n?'':' disabled')+'>Start '+(n?Math.min(n,f.count||n):0)+' questions</button>';
   h+='<button class="btn alt" data-act="retryMistakes"'+(mi?'':' disabled')+'>Retry my mistakes ('+mi+')</button>';
   h+='<button class="btn alt" data-act="resetProg">Clear saved progress</button></div>';
@@ -785,7 +932,7 @@ function setupHTML(){
 
 function badges(q,k){
   var tf=DB[k].tf[q.t];
-  return '<div class="qhead"><span class="tag paper">'+esc(plabel(k,q.p))+', Q'+q.n+'</span><span class="tag">Part A</span>'+(q.img?'<span class="tag">Has diagram</span>':'')+'<span class="tag">Unit '+q.u+'</span><span class="tag freq">'+tier(tf.n)+' · '+tf.n+'× in '+tf.np+'/5 papers</span></div><p class="topicline"><b>'+esc(tf.name)+'</b> · '+esc(UNITS[k][q.u])+'</p>';
+  return '<div class="qhead"><span class="tag paper">'+esc(plabel(k,q.p))+', Q'+q.n+'</span><span class="tag">Part A</span>'+(q.img?'<span class="tag">Has diagram</span>':'')+'<span class="tag">Unit '+q.u+'</span><span class="tag freq">'+tier(tf.n)+' · '+tf.n+'× in '+tf.np+'/'+PAPERS[k].length+' papers</span></div><p class="topicline"><b>'+esc(tf.name)+'</b> · '+esc(UNITS[k][q.u])+'</p>';
 }
 function alsoHTML(q,k){
   var tf=DB[k].tf[q.t];
@@ -900,14 +1047,14 @@ function hotHTML(){
   var k=subj(),d=DB[k],ps=PAPERS[k];
   var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
   var top5=topics.slice(0,5).reduce(function(a,t){return a+t.n},0);
-  var h='<section class="sheet"><h2>Which topics keep coming back</h2><p class="sub">Counted over the Part A questions in the five papers. A filled bubble means the topic was asked in that paper. The top five topics make up '+Math.round(top5/d.qs.length*100)+'% of all Part A questions.</p>';
+  var h='<section class="sheet" style="--np:'+ps.length+'"><h2>Which topics keep coming back</h2><p class="sub">Counted over the Part A questions in the '+ps.length+' papers. A filled bubble means the topic was asked in that paper. The top five topics make up '+Math.round(top5/d.qs.length*100)+'% of all Part A questions.</p>';
   h+='<div class="hot hd"><span>Topic</span><span class="dots">'+ps.map(function(p){return '<span>'+p[2]+'</span>'}).join("")+'</span><span style="text-align:right">Asked</span><span></span></div>';
   topics.forEach(function(t){
     var done=0,right=0;
     t.items.forEach(function(x){var s=store.stats[x.id];if(s){done++;if(s.l===1)right++}});
     h+='<div class="hot"><div class="nm">'+esc(t.name)+'<small>Unit '+t.u+': '+esc(UNITS[k][t.u])+' · '+tier(t.n)+(done?' · your last tries: '+right+' of '+done+' right':'')+'</small></div>';
     h+='<div class="dots">'+ps.map(function(p){var c=t.items.filter(function(x){return x.p===p[0]}).length;return '<span class="pd'+(c?' on':'')+'" title="'+p[1]+(c?': '+c+' question'+(c>1?'s':''):': not asked')+'"></span>'}).join("")+'</div>';
-    h+='<div class="cnt">'+t.n+'×<small>'+t.np+'/5 papers</small></div><button class="mini" data-act="practiceTopic" data-v="'+t.id+'">Practice</button></div>';
+    h+='<div class="cnt">'+t.n+'×<small>'+t.np+'/'+ps.length+' papers</small></div><button class="mini" data-act="practiceTopic" data-v="'+t.id+'">Practice</button></div>';
   });
   return h+'</section>';
 }
