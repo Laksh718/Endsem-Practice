@@ -262,6 +262,44 @@ select:hover{border-color:var(--omr)}
   .inquiz .orow .on{font-size:clamp(12.5px,1.4vh,14.5px)}
   .inquiz .qbody.hasimg .qimg{max-height:58vh;width:100%}
 }
+[hidden]{display:none!important}
+.khead{display:flex;gap:16px 24px;flex-wrap:wrap;align-items:flex-end;justify-content:space-between}
+.khead>div:first-child{flex:1 1 420px}
+.kctl{display:flex;gap:10px;flex-wrap:wrap}
+.kctl input{min-width:260px;flex:1;padding:11px 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--sheet);font-size:15px}
+.kctl input:focus{border-color:var(--omr);outline:none}
+.kctl .btn.on{border-color:var(--omr);color:var(--omr)}
+.kpaper{scroll-margin-top:12px}
+.kph{display:flex;align-items:baseline;gap:12px;margin-bottom:14px}
+.kph h3{margin:0;font-size:24px}
+.kgrid{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px;margin-bottom:22px}
+.kcell{display:flex;align-items:center;justify-content:space-between;gap:6px;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--soft);color:var(--ink);text-decoration:none;font-size:14px}
+.kcell span{color:var(--muted);font-weight:600}
+.kcell b{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--ok);color:#fff;font-size:14px}
+a.kcell:hover{border-color:var(--ok)}
+.kcell.skip b{background:var(--line);color:var(--muted)}
+.kgrid.blur .kcell b{background:var(--line);color:transparent}
+.kcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,480px),1fr));gap:16px}
+.kcard{border:1px solid var(--line);border-radius:16px;padding:18px 20px;background:var(--sheet);scroll-margin-top:16px}
+.kcard:target{border-color:var(--omr);box-shadow:0 0 0 3px var(--omr-soft)}
+.kch{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.kq{font-size:17px;font-weight:600;line-height:1.55;margin:0 0 14px;white-space:pre-wrap}
+.kcard .qimg{max-height:280px;width:auto;margin:0 0 14px}
+.kopts{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.kopt{display:flex;align-items:center;gap:12px;padding:9px 12px;border:1.5px solid var(--line);border-radius:12px}
+.kopt .bub{width:32px;height:32px;font-size:14px}
+.kopt .t{flex:1;font-size:15.5px;line-height:1.45;overflow-wrap:anywhere}
+.kopt.ok{border-color:var(--ok);background:var(--ok-soft)}
+.kopt.ok .bub{background:var(--ok);border-color:var(--ok);color:#fff}
+.kopt.ok .mark{color:var(--ok);background:color-mix(in srgb,var(--ok) 14%,transparent)}
+.kexp{margin:12px 0 0;font-size:14.5px;line-height:1.6;color:var(--muted)}
+.kexp b{color:var(--ok)}
+.kcard.hid{cursor:pointer}
+.kcard.hid:not(.open) .kopt.ok{border-color:var(--line);background:none}
+.kcard.hid:not(.open) .kopt.ok .bub{background:var(--sheet);border-color:color-mix(in srgb,var(--omr) 60%,var(--line));color:var(--omr)}
+.kcard.hid:not(.open) .kopt .mark,.kcard.hid:not(.open) .kexp{display:none}
+.kcard.hid:not(.open)::after{content:"Click to show the answer";display:block;margin-top:12px;font-size:13px;font-weight:700;color:var(--omr)}
+@media (max-width:900px){.kgrid{grid-template-columns:repeat(5,minmax(0,1fr))}}
 .foot{margin:28px auto 0;font-size:13.5px;line-height:1.65;color:var(--muted);max-width:75ch;text-align:center}
 
 @media (max-width:1080px){
@@ -676,6 +714,7 @@ function save(){try{localStorage.setItem("pyq-omr-v1",JSON.stringify(store))}cat
 function applyTheme(){var r=document.documentElement;if(store.theme)r.setAttribute("data-theme",store.theme);else r.removeAttribute("data-theme")}
 load();applyTheme();
 
+var KEY={paper:"",hide:false,q:""};
 var S={tab:"practice",view:"setup",f:{papers:[],units:[],topic:"",mode:"practice",count:0,shuffle:false,diagram:false},sess:null};
 function resetFilters(){S.f={papers:[],units:[],topic:"",mode:S.f.mode||"practice",count:0,shuffle:false,diagram:false}}
 function subj(){return store.subj}
@@ -701,7 +740,7 @@ function renderChrome(){
   $("#subjseg").innerHTML=Object.keys(SUBJECTS).map(function(s){
     return '<button data-act="subj" data-v="'+s+'" aria-pressed="'+(s===k)+'">'+esc(SUBJECTS[s].name)+'</button>';
   }).join("");
-  var tabs=[["practice","Practice"],["hot","Hot topics"],["bc","Part B and C pattern"]];
+  var tabs=[["practice","Practice"],["key","Answer key"],["hot","Hot topics"],["bc","Part B and C pattern"]];
   $("#tabs").innerHTML=tabs.map(function(t){return '<button role="tab" data-act="tab" data-v="'+t[0]+'" aria-selected="'+(S.tab===t[0])+'">'+t[1]+'</button>'}).join("");
   $("#foot").innerHTML="Answers were worked out by Claude from scanned question papers. They are not an official key, so check anything that looks off against your notes or faculty. Left out because the scan is incomplete or the printed question is ambiguous: "+esc(SKIPPED[k]);
   $("#themebtn").textContent=store.theme==="dark"?"Light theme":store.theme==="light"?"Dark theme":"Switch theme";
@@ -712,7 +751,8 @@ function render(){
   var m=$("#main");
   if(S.tab==="practice"){
     m.innerHTML=S.view==="setup"?setupHTML():S.view==="quiz"?quizHTML():resultHTML();
-  }else if(S.tab==="hot"){m.innerHTML=hotHTML()}
+  }else if(S.tab==="key"){m.innerHTML=keyHTML();keyFilter()}
+  else if(S.tab==="hot"){m.innerHTML=hotHTML()}
   else{m.innerHTML=bcHTML()}
   var cur=m.querySelector(".orow.cur"),box=m.querySelector(".orows");
   if(cur&&box){var t=cur.offsetTop-box.offsetTop-box.clientHeight/2+cur.offsetHeight/2;box.scrollTop=Math.max(0,t)}
@@ -815,6 +855,47 @@ function resultHTML(){
   }
   return h;
 }
+function keyHTML(){
+  var k=subj(),d=DB[k],ps=PAPERS[k];
+  var h='<section class="sheet"><div class="khead"><div><h2>Answer key</h2><p class="sub" style="margin:0">Every Part A question with its options and the correct answer, paper by paper. These answers were worked out from the scanned papers, not an official key.</p></div>';
+  h+='<div class="kctl"><input id="ksearch" type="search" placeholder="Search questions or options" value="'+esc(KEY.q)+'" aria-label="Search questions"><button class="btn alt'+(KEY.hide?' on':'')+'" data-act="khide">'+(KEY.hide?'Show all answers':'Hide answers')+'</button></div></div>';
+  h+='<div class="chips" style="margin-top:16px"><button class="chip" data-act="kp" data-v="" aria-pressed="'+(!KEY.paper)+'">All papers</button>'+ps.map(function(p){return '<button class="chip" data-act="kp" data-v="'+p[0]+'" aria-pressed="'+(KEY.paper===p[0])+'">'+p[1]+'</button>'}).join("")+'</div>';
+  if(KEY.hide)h+='<p class="hint" style="margin:12px 0 0">Answers are hidden. Click a question card to check your answer.</p>';
+  h+='<p class="hint" id="kempty" style="margin:12px 0 0" hidden>No questions match your search.</p>';
+  h+='</section>';
+  ps.forEach(function(p){
+    if(KEY.paper&&KEY.paper!==p[0])return;
+    var qs=d.qs.filter(function(q){return q.p===p[0]}).sort(function(a,b){return a.n-b.n});
+    var by={};qs.forEach(function(q){by[q.n]=q});
+    h+='<section class="sheet kpaper" data-paper="'+p[0]+'"><div class="kph"><h3>'+p[1]+'</h3><span class="hint">'+qs.length+' of 20 questions</span></div>';
+    h+='<div class="kgrid'+(KEY.hide?' blur':'')+'">';
+    for(var n=1;n<=20;n++){var q=by[n];
+      h+=q?'<a class="kcell" href="#k-'+q.id+'"><span>'+n+'</span><b>'+"ABCD"[q.a]+'</b></a>':'<span class="kcell skip" title="Left out: see the note at the bottom of the page"><span>'+n+'</span><b>–</b></span>';}
+    h+='</div><div class="kcards">';
+    qs.forEach(function(q){
+      var tf=d.tf[q.t];
+      h+='<article class="kcard'+(KEY.hide?' hid':'')+'" id="k-'+q.id+'" data-act="kreveal" data-s="'+esc((q.q+" "+q.o.join(" ")+" "+tf.name).toLowerCase())+'">';
+      h+='<div class="kch"><span class="tag paper">Q'+q.n+'</span><span class="tag">'+esc(tf.name)+'</span></div>';
+      h+='<p class="kq">'+esc(q.q)+'</p>'+(q.img?'<img class="qimg" loading="lazy" src="'+imgSrc(q.img)+'" alt="Diagram for '+p[1]+' Q'+q.n+'">':'');
+      h+='<ol class="kopts">'+q.o.map(function(o,i){return '<li class="kopt'+(i===q.a?' ok':'')+'"><span class="bub">'+"ABCD"[i]+'</span><span class="t">'+esc(o)+'</span>'+(i===q.a?'<span class="mark">Answer</span>':'')+'</li>'}).join("")+'</ol>';
+      h+='<p class="kexp"><b>Answer '+"ABCD"[q.a]+'.</b> '+esc(q.e)+'</p></article>';
+    });
+    h+='</div><p class="hint knone" hidden>No questions in this paper match your search.</p></section>';
+  });
+  return h;
+}
+function keyFilter(){
+  var t=(KEY.q||"").trim().toLowerCase(),n=0;
+  document.querySelectorAll(".kpaper").forEach(function(sec){
+    var shown=0;
+    sec.querySelectorAll(".kcard").forEach(function(c){var ok=!t||c.getAttribute("data-s").indexOf(t)>=0;c.hidden=!ok;if(ok)shown++});
+    sec.querySelector(".kgrid").hidden=!!t;
+    sec.querySelector(".knone").hidden=true;
+    sec.hidden=!!t&&shown===0;
+    n+=shown;
+  });
+  var e=document.getElementById("kempty");if(e)e.hidden=n>0;
+}
 function hotHTML(){
   var k=subj(),d=DB[k],ps=PAPERS[k];
   var topics=Object.keys(d.tf).map(function(t){return d.tf[t]}).sort(function(a,b){return b.n-a.n||b.np-a.np||a.name.localeCompare(b.name)});
@@ -892,7 +973,10 @@ document.addEventListener("click",function(e){
   var b=e.target.closest("[data-act]");if(!b)return;
   var act=b.getAttribute("data-act"),v=b.getAttribute("data-v");
   switch(act){
-    case "subj":store.subj=v;save();resetFilters();S.view="setup";S.sess=null;render();break;
+    case "kp":KEY.paper=v;render();break;
+    case "khide":KEY.hide=!KEY.hide;render();break;
+    case "kreveal":var c=b.closest(".kcard");if(c&&KEY.hide)c.classList.toggle("open");break;
+    case "subj":KEY.paper="";store.subj=v;save();resetFilters();S.view="setup";S.sess=null;render();break;
     case "tab":S.tab=v;if(v==="practice"&&S.view!=="quiz"&&S.view!=="result")S.view="setup";render();break;
     case "theme":store.theme=store.theme===""?"dark":store.theme==="dark"?"light":"";save();applyTheme();render();break;
     case "tp":var pi=S.f.papers.indexOf(v);if(pi>=0)S.f.papers.splice(pi,1);else S.f.papers.push(v);render();break;
@@ -912,6 +996,9 @@ document.addEventListener("click",function(e){
     case "toSetup":S.view="setup";S.sess=null;render();break;
     case "practiceTopic":S.tab="practice";S.view="setup";resetFilters();S.f.topic=v;startFromFilters();break;
   }
+});
+document.addEventListener("input",function(e){
+  if(e.target.id==="ksearch"){KEY.q=e.target.value;keyFilter()}
 });
 document.addEventListener("change",function(e){
   var t=e.target,f=t.getAttribute&&t.getAttribute("data-f");if(!f)return;
