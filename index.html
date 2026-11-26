@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>OMR Practice – FLA, CN &amp; Discrete Maths past papers</title>
+<title>OMR Practice – CN, FLA &amp; Discrete Maths past papers</title>
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <meta name="theme-color" content="#b4295e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -391,8 +391,8 @@ var PAPERS={
 };
 /* Order = exam order. status: "now" (next exam), "done" (exam written), "next" (after that). */
 var SUBJECTS={
- fla:{name:"Formal Language & Automata",short:"FLA",code:"21CSC301T",status:"now"},
- cn:{name:"Computer Networks",short:"CN",code:"21CSC302J",status:"next"},
+ cn:{name:"Computer Networks",short:"CN",code:"21CSC302J",status:"now"},
+ fla:{name:"Formal Language & Automata",short:"FLA",code:"21CSC301T",status:"done"},
  dm:{name:"Discrete Mathematics",short:"DM",code:"21MAB302T",status:"done"}
 };
 var STATUS={now:"Up now",done:"Exam done",next:"Next"};
@@ -856,8 +856,8 @@ function plabel(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)r
 function pshort(k,p){var a=PAPERS[k];for(var i=0;i<a.length;i++)if(a[i][0]===p)return a[i][2];return p}
 function tier(n){return n>=5?"Hot":n>=3?"Frequent":n===2?"Repeats":"Asked once"}
 
-var store={stats:{},subj:"fla",theme:"",v:2};
-function load(){try{var s=localStorage.getItem("pyq-omr-v1");if(s){var o=JSON.parse(s);if(o&&typeof o==="object"){store.stats=o.stats||{};store.subj=o.subj||"fla";store.theme=o.theme||"";if((o.v||1)<2&&store.subj==="dm")store.subj="fla";if(!SUBJECTS[store.subj])store.subj="fla"}}}catch(e){}}
+var store={stats:{},subj:"cn",theme:"",v:3};
+function load(){try{var s=localStorage.getItem("pyq-omr-v1");if(s){var o=JSON.parse(s);if(o&&typeof o==="object"){store.stats=o.stats||{};store.subj=o.subj||"cn";store.theme=o.theme||"";if((o.v||1)<3)store.subj="cn";if(!SUBJECTS[store.subj])store.subj="cn"}}}catch(e){}}
 function save(){try{localStorage.setItem("pyq-omr-v1",JSON.stringify(store))}catch(e){}}
 function applyTheme(){var r=document.documentElement;if(store.theme)r.setAttribute("data-theme",store.theme);else r.removeAttribute("data-theme")}
 load();applyTheme();
